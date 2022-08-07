@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import Spinner from "react-svg-spinner";
+import React, { useEffect, useState } from "react";
+
 import { useIndexedDB } from "react-indexed-db";
 import { STORENAME } from "../../utils/dbConfig";
 import { ethers } from "ethers";
@@ -49,6 +49,25 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const getAccount = async () => {
+      try {
+        const wallet = await getByID(1);
+
+        if (wallet && wallet.wallet && wallet.active === true) {
+          navigate("/home");
+          return;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getAccount();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigate]);
+
   return (
     <div className="container ">
       <div className="min-h-screen flex flex-col justify-center">
