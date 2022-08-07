@@ -2,7 +2,7 @@ import Web3 from "web3";
 import { PROVIDER } from "../utils";
 import { stakeAbi, stakeAddress } from "./contracts/staking";
 import { tokenAbi, tokenAddress } from "./contracts/token";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 import { ethers } from "ethers";
 
 export const shortAddress = (str) => {

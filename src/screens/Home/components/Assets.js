@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import dummy1 from "../../../assets/nfts/dummy1.png";
-import dummy2 from "../../../assets/nfts/dummy2.png";
+// import dummy1 from "../../../assets/nfts/dummy1.png";
+// import dummy2 from "../../../assets/nfts/dummy2.png";
 const Assets = () => {
   const [currentActive, setCurrentActive] = useState(0);
 

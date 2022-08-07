@@ -4,18 +4,32 @@ import Step2 from "./components/Step2";
 import Step3 from "./components/Step3";
 import Step4 from "./components/Step4";
 import { useNavigate } from "react-router-dom";
-
+// import { CRYPTOJSSECRET } from "../../utils";
+// import { AES } from "crypto-js";
+import { useIndexedDB } from "react-indexed-db";
+import { STORENAME } from "../../utils/dbConfig";
+// import CryptoJS from "crypto-js";
 const Welcome = () => {
   const [steps, setSteps] = useState(0);
   const [wallet, setWallet] = useState(null);
   const navigate = useNavigate();
+  const { getByID } = useIndexedDB(STORENAME);
+
   useEffect(() => {
-    const account = localStorage.getItem("bit-wallet");
-    if (account) {
-      navigate("/home");
-      return;
-    }
-  }, []);
+    const getAccount = async () => {
+      try {
+        const wallet = await getByID(1);
+        if (wallet) {
+          navigate("/home");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getAccount();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigate]);
   const nextStep = () => {
     setSteps((prev) => prev + 1);
   };
