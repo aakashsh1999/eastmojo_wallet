@@ -24,7 +24,9 @@ module.exports = {
         center: true,
         padding: "1rem",
         screens: {
-          xl: "1300px",
+          xl: "500px",
+          "2xl": "500px",
+          md: "500px",
         },
       },
     },

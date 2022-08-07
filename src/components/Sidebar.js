@@ -9,8 +9,13 @@ import {
 } from "react-icons/ai";
 import { BiSupport } from "react-icons/bi";
 import { getUserBalance } from "../web3";
+import { useIndexedDB } from "react-indexed-db";
+import { STORENAME } from "../utils/dbConfig";
+import { useNavigate } from "react-router-dom";
 const Sidebar = ({ active, setActive, menuRef, account }) => {
   const [balance, setBalance] = useState(0);
+  const { getByID, update } = useIndexedDB(STORENAME);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getData = async () => {
@@ -32,6 +37,51 @@ const Sidebar = ({ active, setActive, menuRef, account }) => {
       clearInterval(intervalId);
     };
   }, [account]);
+
+  const logOut = async () => {
+    try {
+      const wallet = await getByID(1);
+      if (!wallet.wallet) {
+        return;
+      }
+      const res = await update({ ...wallet, active: false });
+      setTimeout(() => {
+        navigate("/login");
+      }, 500);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const sidebarList = [
+    {
+      text: "Recent transactions",
+      icon: <AiOutlineFieldTime />,
+      handler: () => {},
+    },
+    {
+      text: "Settings",
+      icon: <AiTwotoneSetting />,
+      handler: () => {},
+    },
+    {
+      text: "Support",
+      icon: <BiSupport />,
+      handler: () => {},
+    },
+    {
+      text: "Get your QR code",
+      icon: <AiOutlineQrcode />,
+      handler: () => {},
+    },
+    {
+      text: "Logout",
+      icon: <AiOutlineLogout />,
+      handler: () => logOut(),
+    },
+  ];
+
   return (
     <div
       ref={menuRef}
@@ -64,6 +114,7 @@ const Sidebar = ({ active, setActive, menuRef, account }) => {
           <button
             key={i}
             className="grid grid-flow-col justify-start gap-2 items-center"
+            onClick={val.handler}
           >
             <span className="text-primary">{val.icon}</span>
             <p>{val.text}</p>
@@ -75,31 +126,3 @@ const Sidebar = ({ active, setActive, menuRef, account }) => {
 };
 
 export default Sidebar;
-
-const sidebarList = [
-  {
-    text: "Recent transactions",
-    icon: <AiOutlineFieldTime />,
-    handler: "",
-  },
-  {
-    text: "Settings",
-    icon: <AiTwotoneSetting />,
-    handler: "",
-  },
-  {
-    text: "Support",
-    icon: <BiSupport />,
-    handler: "",
-  },
-  {
-    text: "Get your QR code",
-    icon: <AiOutlineQrcode />,
-    handler: "",
-  },
-  {
-    text: "Logout",
-    icon: <AiOutlineLogout />,
-    handler: "",
-  },
-];

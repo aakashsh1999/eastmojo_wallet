@@ -9,6 +9,7 @@ import { Toaster } from "react-hot-toast";
 import { DBConfig } from "./utils/dbConfig";
 import { initDB } from "react-indexed-db";
 import { NETWORKS } from "./utils";
+import Login from "./screens/Login";
 initDB(DBConfig);
 const App = () => {
   useEffect(() => {
@@ -31,6 +32,7 @@ const App = () => {
       <Routes>
         <Route index element={<Welcome />} />
         <Route path="home" element={<Home />} />
+        <Route path="login" element={<Login />} />
       </Routes>
     </div>
   );

@@ -49,7 +49,11 @@ const Step4 = ({ nextStep, prevStep, wallet }) => {
         CRYPTOJSSECRET
       ).toString();
 
-      add({ wallet: encryptedWallet, jsonwallet: encrypted }).then(
+      add({
+        wallet: encryptedWallet,
+        jsonwallet: encrypted,
+        active: true,
+      }).then(
         (event) => {
           console.log(event);
         },

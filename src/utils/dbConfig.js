@@ -13,6 +13,11 @@ export const DBConfig = {
           keypath: "jsonwallet",
           options: { unique: false },
         },
+        {
+          name: "active",
+          keypath: "active",
+          options: { unique: false},
+        },
       ],
     },
   ],

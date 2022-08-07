@@ -23,9 +23,15 @@ const Home = () => {
     const getAccount = async () => {
       try {
         const wallet = await getByID(1);
-        if (!wallet) {
+        if (!wallet || !wallet.wallet) {
           navigate("/");
+          return;
         }
+        if (wallet && wallet.wallet && wallet.active === false) {
+          navigate("/login");
+          return;
+        }
+
         const bytes = AES.decrypt(wallet.wallet, CRYPTOJSSECRET);
         const originalWallet = bytes.toString(CryptoJS.enc.Utf8);
         setAccount(JSON.parse(originalWallet));
@@ -75,7 +81,7 @@ const Home = () => {
   }, [account]);
 
   return (
-    <div className="relative max-w-[500px] mx-auto py-10 px-4">
+    <div className="relative container py-10 ">
       <Header account={account} />
       <div className="rounded-lg flex bg-dark-600 p-3 justify-between items-center mt-8">
         <p>Account 1</p>

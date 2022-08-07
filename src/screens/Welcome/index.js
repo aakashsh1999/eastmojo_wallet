@@ -13,14 +13,28 @@ const Welcome = () => {
   const [steps, setSteps] = useState(0);
   const [wallet, setWallet] = useState(null);
   const navigate = useNavigate();
-  const { getByID } = useIndexedDB(STORENAME);
+  const { getByID, deleteRecord } = useIndexedDB(STORENAME);
 
   useEffect(() => {
     const getAccount = async () => {
       try {
         const wallet = await getByID(1);
-        if (wallet) {
+        if (wallet && !wallet.wallet) {
+          try {
+            const res = await deleteRecord(1);
+            console.log(res);
+          } catch (error) {
+            console.log(error);
+          }
+        }
+
+        if (wallet && wallet.wallet) {
           navigate("/home");
+          return;
+        }
+        if (wallet && wallet.wallet && wallet.active === false) {
+          navigate("/login");
+          return;
         }
       } catch (error) {
         console.log(error);
@@ -38,7 +52,7 @@ const Welcome = () => {
   };
 
   return (
-    <div className="max-w-[500px] w-full mx-auto py-10 px-4">
+    <div className="container py-10 ">
       {steps === 0 ? (
         <Step1 nextStep={nextStep} />
       ) : steps === 1 ? (
