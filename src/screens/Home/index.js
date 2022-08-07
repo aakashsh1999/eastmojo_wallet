@@ -75,7 +75,7 @@ const Home = () => {
   }, [account]);
 
   return (
-    <div className="relative max-w-[500px] mx-auto py-10">
+    <div className="relative max-w-[500px] mx-auto py-10 px-4">
       <Header account={account} />
       <div className="rounded-lg flex bg-dark-600 p-3 justify-between items-center mt-8">
         <p>Account 1</p>

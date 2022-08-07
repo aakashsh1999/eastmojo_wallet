@@ -38,7 +38,7 @@ const Welcome = () => {
   };
 
   return (
-    <div className="max-w-[500px] w-full mx-auto py-10">
+    <div className="max-w-[500px] w-full mx-auto py-10 px-4">
       {steps === 0 ? (
         <Step1 nextStep={nextStep} />
       ) : steps === 1 ? (
