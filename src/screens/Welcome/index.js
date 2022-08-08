@@ -51,7 +51,7 @@ const Welcome = () => {
     setSteps((prev) => prev - 1);
   };
 
-  return (
+return (
     <div className="container py-10 ">
       {steps === 0 ? (
         <Step1 nextStep={nextStep} />

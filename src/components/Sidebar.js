@@ -20,8 +20,8 @@ const Sidebar = ({ active, setActive, menuRef, account }) => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const balance = await getUserBalance(account.address);
-        // console.log("balance", balance);
+        let balance = await getUserBalance(account.address);
+        balance = Number(balance).toFixed(5);
         setBalance(balance);
       } catch (error) {
         console.log(error);

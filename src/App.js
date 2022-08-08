@@ -10,6 +10,8 @@ import { DBConfig } from "./utils/dbConfig";
 import { initDB } from "react-indexed-db";
 import { NETWORKS } from "./utils";
 import Login from "./screens/Login";
+import Send from "./screens/Send";
+import Receive from "./screens/Receive";
 initDB(DBConfig);
 const App = () => {
   useEffect(() => {
@@ -33,6 +35,8 @@ const App = () => {
         <Route index element={<Welcome />} />
         <Route path="home" element={<Home />} />
         <Route path="login" element={<Login />} />
+        <Route path="send" element={<Send />} />
+        <Route path="receive" element={<Receive />} />
       </Routes>
     </div>
   );

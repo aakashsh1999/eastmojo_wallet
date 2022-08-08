@@ -4,6 +4,7 @@ import { BiMenu } from "react-icons/bi";
 import { AiOutlineCaretDown } from "react-icons/ai";
 import { NETWORKS } from "../utils";
 import Sidebar from "./Sidebar";
+import { Link } from "react-router-dom";
 const Header = ({ account }) => {
   const [active, setActive] = useState(false);
   const menuRef = useRef(null);
@@ -59,7 +60,9 @@ const Header = ({ account }) => {
             <AiOutlineCaretDown />
           </div>
         </button>
-        <img src={Logo} className="w-[50px]" alt="" />
+        <Link to="/home">
+          <img src={Logo} className="w-[50px]" alt="" />
+        </Link>
       </div>
       <div
         className={`${

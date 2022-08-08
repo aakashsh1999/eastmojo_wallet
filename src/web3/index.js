@@ -3,7 +3,9 @@ import { PROVIDER } from "../utils";
 import { stakeAbi, stakeAddress } from "./contracts/staking";
 import { tokenAbi, tokenAddress } from "./contracts/token";
 // import toast from "react-hot-toast";
-import { ethers } from "ethers";
+import { ethers, providers } from "ethers";
+import toast from "react-hot-toast";
+import { formatEther } from "ethers/lib/utils";
 
 export const shortAddress = (str) => {
   if (str) {
@@ -22,6 +24,18 @@ export const formatFromWei = (str, decimal) => {
     } else {
       return Web3.utils.fromWei(str, "ether");
     }
+  }
+};
+export const checkAddress = (addr) => {
+  try {
+    const address = ethers.utils.getAddress(addr);
+    if (address) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.log(error);
+    return false;
   }
 };
 
@@ -79,7 +93,14 @@ export const createAccount2 = async () => {
 };
 export const getProvider = async () => {
   try {
-    const provider = new ethers.providers.JsonRpcProvider(PROVIDER);
+    const localProvider = JSON.parse(
+      localStorage.getItem("bit-current-network")
+    );
+    // console.log(localProvider);
+    if (!localProvider) {
+      return 0;
+    }
+    const provider = new ethers.providers.JsonRpcProvider(localProvider.rpc);
     return provider;
   } catch (error) {
     return null;
@@ -114,15 +135,46 @@ export const getCustomContract = async (abi, address) => {
   }
 };
 
-export const getAccount = () => {
-  let user = localStorage.getItem("user");
-  if (user) {
-    user = JSON.parse(user);
-    if (user.walletAddress) {
-      return { ok: true, account: user.walletAddress };
-    }
-    return { ok: false, account: null };
-  } else {
-    return { ok: false, account: null };
+export const sendCurrency = async (toAddress, amount, wallet) => {
+  const isValid = checkAddress(toAddress);
+  if (!isValid) {
+    toast.error("Not a valid address, Please Input a valid address");
+    return { tx: null, ok: false };
+  }
+  const provider = await getProvider();
+  if (!provider) {
+    toast.error("Something went wrong");
+    return { tx: null, ok: false };
+  }
+  const bal = await provider.getBalance(wallet.address);
+  const realBal = formatEther(bal);
+
+  if (+realBal < amount) {
+    toast.error("Insufficient balance");
+    return;
+  }
+
+  const toastId = toast.loading("Transaction processing..");
+
+  let signer = new ethers.Wallet(wallet.privateKey, provider);
+
+  let txObject = {
+    to: toAddress,
+    value: ethers.utils.parseEther(amount),
+  };
+
+  try {
+    const tx = await signer.sendTransaction(txObject);
+    toast.loading("Please wait we are getting confirmation from blockchain", {
+      id: toastId,
+    });
+    const hash = await tx.wait();
+    toast.success("Transaction completed successfully!", { id: toastId });
+    console.log(hash);
+    return { tx: hash, ok: true };
+  } catch (error) {
+    console.log(error);
+    toast.error("Something went wrong", { id: toastId });
+    return { tx: null, ok: false };
   }
 };
