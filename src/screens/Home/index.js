@@ -35,6 +35,7 @@ const Home = () => {
         const bytes = AES.decrypt(wallet.wallet, CRYPTOJSSECRET);
         const originalWallet = bytes.toString(CryptoJS.enc.Utf8);
         setAccount(JSON.parse(originalWallet));
+        // console.log(JSON.parse(originalWallet));
       } catch (error) {
         console.log(error);
       }

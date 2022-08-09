@@ -54,6 +54,10 @@ const Login = () => {
     const getAccount = async () => {
       try {
         const wallet = await getByID(1);
+        if (!wallet) {
+          navigate("/");
+          return;
+        }
 
         if (wallet && wallet.wallet && wallet.active === true) {
           navigate("/home");

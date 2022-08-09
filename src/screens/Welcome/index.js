@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 // import { AES } from "crypto-js";
 import { useIndexedDB } from "react-indexed-db";
 import { STORENAME } from "../../utils/dbConfig";
+import Step5 from "./components/Step5";
 // import CryptoJS from "crypto-js";
 const Welcome = () => {
   const [steps, setSteps] = useState(0);
@@ -44,14 +45,15 @@ const Welcome = () => {
     getAccount();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
-  const nextStep = () => {
-    setSteps((prev) => prev + 1);
+  const nextStep = (step = null) => {
+    console.log(step);
+    setSteps((prev) => (step !== null || undefined ? step : prev + 1));
   };
-  const prevStep = () => {
-    setSteps((prev) => prev - 1);
+  const prevStep = (step = null) => {
+    setSteps((prev) => (step !== null || undefined ? step : prev - 1));
   };
 
-return (
+  return (
     <div className="container py-10 ">
       {steps === 0 ? (
         <Step1 nextStep={nextStep} />
@@ -64,8 +66,15 @@ return (
           setWallet={setWallet}
           wallet={wallet}
         />
+      ) : steps === 3 ? (
+        <Step4
+          nextStep={nextStep}
+          prevStep={prevStep}
+          setWallet={setWallet}
+          wallet={wallet}
+        />
       ) : (
-        <Step4 nextStep={nextStep} prevStep={prevStep} wallet={wallet} />
+        <Step5 nextStep={nextStep} prevStep={prevStep} wallet={wallet} />
       )}
     </div>
   );

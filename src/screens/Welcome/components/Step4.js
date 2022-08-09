@@ -3,123 +3,107 @@ import toast from "react-hot-toast";
 import { AiFillCaretLeft } from "react-icons/ai";
 import Spinner from "react-svg-spinner";
 import { useNavigate } from "react-router-dom";
-import { AES } from "crypto-js";
-import { CRYPTOJSSECRET } from "../../../utils";
-import { useIndexedDB } from "react-indexed-db";
-import { STORENAME } from "../../../utils/dbConfig";
-const Step4 = ({ nextStep, prevStep, wallet }) => {
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [checked, setChecked] = useState(false);
+
+import { ethers } from "ethers";
+const Step4 = ({ nextStep, prevStep, setWallet, wallet }) => {
+  const [privateKey, setPrivateKey] = useState("");
+  const [phrase, setPhrase] = useState("");
   const [loading, setLoading] = useState(false);
+  const [type, setType] = useState(0);
   const navigate = useNavigate();
-  const { add } = useIndexedDB(STORENAME);
 
   const handleSubmit = async () => {
-    console.log(!password);
-    if (!password) {
-      toast.error("password is required!");
+    console.log(!privateKey);
+    if (+type === 0 && !privateKey) {
+      toast.error("Invalid Input!");
       return;
     }
-
-    if (password !== confirmPassword) {
-      toast.error("password does not Match!");
-      return;
-    }
-    if (!checked) {
-      toast.error("Please agree to our terms & conditions");
-      return;
-    }
-
-    if (!wallet) {
-      toast.error("No wallet created");
+    if (+type === 1 && !phrase) {
+      toast.error("Invalid Input!");
       return;
     }
     try {
       setLoading(true);
-      const encrypted = await wallet.encrypt(password);
-      const memnoic = wallet._mnemonic();
-
-      const encryptedWallet = AES.encrypt(
-        JSON.stringify({
-          address: wallet.address,
-          privateKey: wallet.privateKey,
-          memnoic,
-        }),
-        CRYPTOJSSECRET
-      ).toString();
-
-      add({
-        wallet: encryptedWallet,
-        jsonwallet: encrypted,
-        active: true,
-      }).then(
-        (event) => {
-          console.log(event);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-      setLoading(false);
-      navigate("/home");
+      let wallet = null;
+      if (+type === 0) {
+        wallet = new ethers.Wallet(privateKey);
+      } else {
+        wallet = ethers.Wallet.fromMnemonic(phrase);
+      }
+      console.log(wallet);
+      setTimeout(() => {
+        setWallet(wallet);
+        setLoading(false);
+        nextStep();
+      }, 2000);
+      // navigate("/home");
     } catch (error) {
       console.log(error);
       setLoading(false);
+      toast.error("Invalid input");
     }
   };
 
   return (
     <div className="">
-      <button className="flex items-center" onClick={prevStep}>
+      <button className="flex items-center" onClick={() => prevStep()}>
         <AiFillCaretLeft className="text-3xl text-primary" />
         <p className="ml-1 text-lg text font-bold"> Back</p>
       </button>
-      <h2 className="max-w-[300px] text mt-6 text-5xl font-extrabold  leading-[3.5rem]">
-        Create password
+      <h2 className="max-w-[300px] text-white mt-6 text-5xl font-extrabold  leading-[3.5rem] ">
+        Import Account
       </h2>
-      <div className="mt-10">
-        <label htmlFor="" className="block text-400">
-          Password
+      <div className="mt-10 flex  items-center">
+        <label htmlFor="" className="text-xl font-bold text-400">
+          Select Type
         </label>
-        <input
-          type="password"
-          className="bg-transparent w-full mt-2 rounded-xl border-2 border-[#232424] py-3 focus:border-primary"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </div>
-      <div className="mt-4 ">
-        <label htmlFor="" className="block text-400">
-          Confirm Password
-        </label>
-        <input
-          type="password"
-          className="bg-transparent w-full mt-2 rounded-xl border-2 border-[#232424] py-3 focus:border-primary"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-      </div>
-      <div className="mt-4 grid grid-flow-col gap-2 items-center justify-start">
-        <input
-          type="checkbox"
+        <select
           name=""
-          id="term"
-          className="bg-transparent rounded p-2.5 focus:outline-none "
-          value={checked}
-          onChange={() => setChecked(!checked)}
-        />
-        <label htmlFor="term" className="block text-muted-400">
-          I agree to the Terms and conditions of BIT wallet.
-        </label>
+          id=""
+          className="bg-transparent flex-1 ml-5 rounded-lg"
+          onChange={(e) => setType(e.target.value)}
+        >
+          <option value={0} className="text-black">
+            PrivateKey
+          </option>
+          <option value={1} className="text-black">
+            Phrase
+          </option>
+        </select>
       </div>
+      {Number(type) === 0 ? (
+        <div className="mt-10">
+          <label htmlFor="" className="block text-400">
+            PrivateKey
+          </label>
+          <input
+            type="text"
+            className="bg-transparent w-full mt-2 rounded-xl border-2 border-[#232424] py-3 focus:border-primary"
+            value={privateKey}
+            onChange={(e) => setPrivateKey(e.target.value)}
+          />
+        </div>
+      ) : (
+        <div className="mt-10">
+          <label htmlFor="" className="block text-400">
+            Phrase
+          </label>
+          <input
+            type="text"
+            className="bg-transparent w-full mt-2 rounded-xl border-2 border-[#232424] py-3 focus:border-primary"
+            value={phrase}
+            onChange={(e) => setPhrase(e.target.value)}
+          />
+        </div>
+      )}
+
       <button
         onClick={handleSubmit}
         className={` ${
           loading ? "bg-gray-500 pointer-events-none" : "bg-primary"
         } py-3 px-10 mt-10  rounded-xl`}
       >
-        {loading ? <Spinner color={"white"} size="20px" /> : " Create"}
+        {loading ? <Spinner color={"white"} size="20px" /> : " Import"}
       </button>
     </div>
   );

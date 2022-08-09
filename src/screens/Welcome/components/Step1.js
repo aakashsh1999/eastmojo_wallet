@@ -7,7 +7,7 @@ const Step1 = ({ nextStep }) => {
       <div>
         <img src={Logo} alt="" className="w-[200px]" />
         <button
-          onClick={nextStep}
+          onClick={() => nextStep()}
           className="bg-primary text-lg rounded-lg px-8 py-2 grid grid-flow-col gap-3 mt-8 justify-center items-center"
         >
           <p>Click to start</p>
