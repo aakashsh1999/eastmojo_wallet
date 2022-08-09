@@ -73,13 +73,13 @@ const Step4 = ({ nextStep, prevStep, wallet }) => {
     <div className="">
       <button className="flex items-center" onClick={prevStep}>
         <AiFillCaretLeft className="text-3xl text-primary" />
-        <p className="ml-1 text-lg text-muted font-bold"> Back</p>
+        <p className="ml-1 text-lg text font-bold"> Back</p>
       </button>
-      <h2 className="max-w-[300px] text-muted mt-6 text-5xl font-extrabold  leading-[3.5rem]">
+      <h2 className="max-w-[300px] text mt-6 text-5xl font-extrabold  leading-[3.5rem]">
         Create password
       </h2>
       <div className="mt-10">
-        <label htmlFor="" className="block text-muted-400">
+        <label htmlFor="" className="block text-400">
           Password
         </label>
         <input
@@ -90,7 +90,7 @@ const Step4 = ({ nextStep, prevStep, wallet }) => {
         />
       </div>
       <div className="mt-4 ">
-        <label htmlFor="" className="block text-muted-400">
+        <label htmlFor="" className="block text-400">
           Confirm Password
         </label>
         <input

@@ -19,13 +19,13 @@ const Step3 = ({ nextStep, prevStep, setWallet }) => {
     <div className="">
       <button className="flex items-center" onClick={prevStep}>
         <AiFillCaretLeft className="text-3xl text-primary" />
-        <p className="ml-1 text-lg text-muted font-bold"> Back</p>
+        <p className="ml-1 text-lg text font-bold"> Back</p>
       </button>
-      <h2 className="max-w-[300px] text-muted mt-6 text-5xl font-extrabold  leading-[3.5rem]">
+      <h2 className="max-w-[300px] text mt-6 text-5xl font-extrabold  leading-[3.5rem]">
         Let’s get started..
       </h2>
       <div className="border-2 mt-10 border-[#232424] p-4 py-6 rounded-xl">
-        <p className="max-w-[250px] mx-auto text-center text-muted-400">
+        <p className="max-w-[250px] mx-auto text-center text-400">
           If you have not created wallet before, you can choose below option
         </p>
         <button
@@ -36,7 +36,7 @@ const Step3 = ({ nextStep, prevStep, setWallet }) => {
         </button>
       </div>
       <div className="border-2 mt-10 border-[#232424] p-4 py-6 rounded-xl">
-        <p className="max-w-[250px] mx-auto text-center text-muted-400">
+        <p className="max-w-[250px] mx-auto text-center text-400">
           If you have created wallet before, you can choose below option
         </p>
         <button
