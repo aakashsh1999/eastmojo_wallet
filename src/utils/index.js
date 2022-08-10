@@ -15,16 +15,22 @@ export const copyToClipBoard = async (copyMe) => {
 };
 
 export const CRYPTOJSSECRET = "@^3Hl9H84Y4q";
+export const APIKEYCOVLANT = "ckey_ec86ef21635d4aa180f4225a894";
+export const BASECOVALENT = "https://api.covalenthq.com/v1";
 
 export const NETWORKS = [
   {
     id: 1,
     rpc: "https://polygon-rpc.com/",
     text: "Polygon Mainnet",
+    chain: 137,
+    explorer: "https://polygonscan.com/address/",
   },
   {
     id: 2,
     rpc: "https://rpc-mumbai.maticvigil.com/",
     text: "Polygon Testnet",
+    chain: 80001,
+    explorer: "https://mumbai.polygonscan.com/address/",
   },
 ];

@@ -67,7 +67,7 @@ const Header = ({ account }) => {
       <div
         className={`${
           showmodal ? "block" : "hidden"
-        }  absolute top-[60px] shadow-2xl left-1/2 min-w-[300px] -translate-x-1/2  rounded-md bg-dark-400`}
+        }  absolute top-[60px] shadow-2xl left-1/2 min-w-[300px] -translate-x-1/2  rounded-md bg-dark-400 z-50`}
       >
         {NETWORKS.map((val, i) => (
           <button

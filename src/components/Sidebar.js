@@ -63,7 +63,7 @@ const Sidebar = ({ active, setActive, menuRef, account }) => {
     {
       text: "Settings",
       icon: <AiTwotoneSetting />,
-      handler: () => {},
+      handler: () => navigate("/setting"),
     },
     {
       text: "Support",
@@ -101,10 +101,16 @@ const Sidebar = ({ active, setActive, menuRef, account }) => {
         <p className="mt-4">Account 1</p>
         <h1 className="mb-6 text-4xl font-bold mt-4">{balance} MATIC</h1>
         <div className="grid grid-flow-col gap-2 justify-start items-center">
-          <button className=" bg-primary py-2 px-6 grid grid-flow-col gap-2 justify-center items-center rounded-lg ">
+          <button
+            onClick={() => navigate("/send")}
+            className=" bg-primary py-2 px-6 grid grid-flow-col gap-2 justify-center items-center rounded-lg "
+          >
             <p>Send</p> <MdSend />
           </button>
-          <button className=" bg-primary py-2 px-6 grid grid-flow-col gap-2 justify-center items-center rounded-lg ">
+          <button
+            onClick={() => navigate("/receive")}
+            className=" bg-primary py-2 px-6 grid grid-flow-col gap-2 justify-center items-center rounded-lg "
+          >
             <p>Received</p> <MdOutlineCallReceived />
           </button>
         </div>

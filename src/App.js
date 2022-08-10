@@ -12,6 +12,7 @@ import { NETWORKS } from "./utils";
 import Login from "./screens/Login";
 import Send from "./screens/Send";
 import Receive from "./screens/Receive";
+import Setting from "./screens/Settings";
 initDB(DBConfig);
 const App = () => {
   useEffect(() => {
@@ -37,6 +38,7 @@ const App = () => {
         <Route path="login" element={<Login />} />
         <Route path="send" element={<Send />} />
         <Route path="receive" element={<Receive />} />
+        <Route path="setting" element={<Setting />} />
       </Routes>
     </div>
   );

@@ -1,33 +1,32 @@
 import React, { useState } from "react";
-import { FiCopy } from "react-icons/fi";
+// import { FiCopy } from "react-icons/fi";
 import polygon from "../../assets/polygon.svg";
 import Header from "../../components/Header";
-import { MdSend, MdOutlineCallReceived, MdSwapHoriz } from "react-icons/md";
+import { MdSend } from "react-icons/md";
 
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  checkAddress,
-  getUserBalance,
-  sendCurrency,
-  shortAddress,
-} from "../../web3";
-import { copyToClipBoard } from "../../utils";
+import { sendCurrency } from "../../web3";
+
 import { useIndexedDB } from "react-indexed-db";
 import { STORENAME } from "../../utils/dbConfig";
 import { AES } from "crypto-js";
-import { CRYPTOJSSECRET } from "../../utils";
+import { APIKEYCOVLANT, BASECOVALENT, CRYPTOJSSECRET } from "../../utils";
 import CryptoJS from "crypto-js";
-import { ethers } from "ethers";
-import toast from "react-hot-toast";
+import axios from "axios";
+import TransactionBlock from "./components/TransactionBlock";
+
 const Send = () => {
   const [account, setAccount] = useState(null);
   const navigate = useNavigate();
   const { getByID } = useIndexedDB(STORENAME);
-  const [balance, setBalance] = useState(0);
+  // eslint-disable-next-line no-unused-vars
+  // const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(false);
   const [toAddress, setToAddress] = useState("");
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState("");
+  const [transactions, setTransactions] = useState([]);
+  const [currentNetwork, setCurrentNetwork] = useState(null);
 
   useEffect(() => {
     const getAccount = async () => {
@@ -53,43 +52,57 @@ const Send = () => {
     getAccount();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
-
-  const data = [
-    {
-      text: "Send",
-      icon: <MdSend />,
-    },
-    {
-      text: "Receive",
-      icon: <MdOutlineCallReceived />,
-    },
-    {
-      text: "Swap",
-      icon: <MdSwapHoriz />,
-    },
-  ];
-
   useEffect(() => {
-    const getData = async () => {
-      try {
-        let balance = await getUserBalance(account.address);
-        balance = Number(balance).toFixed(5);
-        // console.log("balance", balance);
-        setBalance(balance);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    const intervalId = setInterval(() => {
-      if (account?.address) {
-        getData();
+    const id = setInterval(() => {
+      const currentLocalNetwork = window.localStorage.getItem(
+        "bit-current-network"
+      );
+      if (currentLocalNetwork) {
+        setCurrentNetwork(JSON.parse(currentLocalNetwork));
       }
     }, 2000);
     return () => {
-      clearInterval(intervalId);
+      clearInterval(id);
     };
-  }, [account]);
+  }, []);
+
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     try {
+  //       let balance = await getUserBalance(account.address);
+  //       balance = Number(balance).toFixed(5);
+  //       // console.log("balance", balance);
+  //       setBalance(balance);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+
+  //   const intervalId = setInterval(() => {
+  //     if (account?.address) {
+  //       getData();
+  //     }
+  //   }, 2000);
+  //   return () => {
+  //     clearInterval(intervalId);
+  //   };
+  // }, [account]);
+
+  useEffect(() => {
+    const getData = async () => {
+      const {
+        data: { data },
+      } = await axios.get(
+        `${BASECOVALENT}/${currentNetwork.chain}/address/${account?.address}/transactions_v2/?key=${APIKEYCOVLANT}`
+      );
+      // console.log(data);
+      setTransactions(data.items);
+    };
+    if (account?.address) {
+      getData();
+    }
+  }, [account, currentNetwork]);
+
   const sendMatic = async () => {
     try {
       setLoading(true);
@@ -101,6 +114,7 @@ const Send = () => {
       setLoading(false);
     }
   };
+
   return (
     <div className="relative container py-10 ">
       <Header account={account} />
@@ -114,38 +128,49 @@ const Send = () => {
         </div>
       </div> */}
       <div>
-        <div className="mt-28 grid gap-4">
-          <div className="">
-            <label htmlFor="">Enter Address</label>
-            <input
-              type="text"
-              className="bg-transparent w-full mt-2 rounded-xl border-2  py-3 focus:border-primary border-primary "
-              value={toAddress}
-              onChange={(e) => setToAddress(e.target.value)}
-            />
-          </div>
-          <div>
-            <label htmlFor="">
-              <div className="flex items-center justify-between">
-                <p>Enter Amount</p>
-                <p>Balance: {balance}</p>
-              </div>
-            </label>
+        <div className="mt-5 grid gap-4">
+          <div className="relative mt-10">
+            <div className="absolute top-1/2 gap-2 -translate-y-1/2 left-4 grid grid-flow-col justify-start  items-center">
+              <img src={polygon} className="w-6" alt="" />
+              <p className="text-xl">Matic</p>
+            </div>
             <input
               type="number"
-              className="bg-transparent w-full mt-2 rounded-xl border-2  py-3 focus:border-primary border-primary "
+              className="bg-[#1F1F20] w-full  rounded-xl py-3 px-4 border-none focus:border-none focus:ring-0 text-right text-xl  font-bold min-h-[60px] pl-36"
               value={amount}
+              placeholder="100"
               onChange={(e) => setAmount(e.target.value)}
+            />
+          </div>
+          <div className="">
+            {/* <label htmlFor="">Enter Address</label> */}
+            <input
+              type="text"
+              className="bg-[#1F1F20] w-full mt-2 rounded-xl  py-3 px-4 border-none focus:border-none focus:ring-0   font-medium min-h-[60px]"
+              value={toAddress}
+              placeholder="Enter receiver wallet address here..."
+              onChange={(e) => setToAddress(e.target.value)}
             />
           </div>
           <button
             onClick={sendMatic}
             className={` ${
               loading ? "bg-gray-500 pointer-events-none" : "bg-primary"
-            } py-3 px-10 mt-10  rounded-xl flex justify-center `}
+            } py-3 px-10 mt-4  rounded-xl flex justify-center  items-center max-w-max`}
           >
-            {loading ? "Please wait..." : " Send"}
+            <p>{loading ? "Please wait..." : " Send"}</p>
+            <p className="ml-2 ">
+              <MdSend />
+            </p>
           </button>
+          <p className="font-bold text-xl mt-6 text-[#666262]">
+            Recent transactions
+          </p>
+          <TransactionBlock
+            transactions={transactions}
+            account={account}
+            currentNetwork={currentNetwork}
+          />
         </div>
       </div>
     </div>
@@ -153,12 +178,3 @@ const Send = () => {
 };
 
 export default Send;
-
-const Button = ({ data }) => {
-  return (
-    <button className="bg-primary grid grid-flow-col gap-2 justify-center items-center py-2 px-2 rounded-md">
-      <p>{data.text}</p>
-      <span className="text-xl">{data.icon}</span>
-    </button>
-  );
-};

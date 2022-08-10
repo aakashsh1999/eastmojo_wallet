@@ -3,7 +3,7 @@ import { PROVIDER } from "../utils";
 import { stakeAbi, stakeAddress } from "./contracts/staking";
 import { tokenAbi, tokenAddress } from "./contracts/token";
 // import toast from "react-hot-toast";
-import { ethers, providers } from "ethers";
+import { ethers } from "ethers";
 import toast from "react-hot-toast";
 import { formatEther } from "ethers/lib/utils";
 
@@ -147,7 +147,7 @@ export const sendCurrency = async (toAddress, amount, wallet) => {
     return { tx: null, ok: false };
   }
   const bal = await provider.getBalance(wallet.address);
-  const realBal = formatEther(bal);
+  const realBal = formatEther(bal.toString());
 
   if (+realBal < amount) {
     toast.error("Insufficient balance");
@@ -163,14 +163,16 @@ export const sendCurrency = async (toAddress, amount, wallet) => {
     value: ethers.utils.parseEther(amount),
   };
 
+  console.log(txObject);
+
   try {
     const tx = await signer.sendTransaction(txObject);
     toast.loading("Please wait we are getting confirmation from blockchain", {
       id: toastId,
     });
+    console.log(tx);
     const hash = await tx.wait();
     toast.success("Transaction completed successfully!", { id: toastId });
-    console.log(hash);
     return { tx: hash, ok: true };
   } catch (error) {
     console.log(error);
