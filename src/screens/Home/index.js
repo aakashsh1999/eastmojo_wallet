@@ -18,6 +18,7 @@ const Home = () => {
   const navigate = useNavigate();
   const { getByID } = useIndexedDB(STORENAME);
   const [balance, setBalance] = useState(0);
+  const [currentNetwork, setCurrentNetwork] = useState(null);
 
   useEffect(() => {
     const getAccount = async () => {
@@ -90,6 +91,20 @@ const Home = () => {
     };
   }, [account]);
 
+  useEffect(() => {
+    const id = setInterval(() => {
+      const currentLocalNetwork = window.localStorage.getItem(
+        "bit-current-network"
+      );
+      if (currentLocalNetwork) {
+        setCurrentNetwork(JSON.parse(currentLocalNetwork));
+      }
+    }, 2000);
+    return () => {
+      clearInterval(id);
+    };
+  }, []);
+
   return (
     <div className="relative container py-10 ">
       <Header account={account} />
@@ -113,7 +128,7 @@ const Home = () => {
           </React.Fragment>
         ))}
       </div>
-      <Assets />
+      <Assets currentNetwork={currentNetwork} account={account} />
     </div>
   );
 };
