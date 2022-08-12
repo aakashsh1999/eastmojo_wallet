@@ -62,7 +62,12 @@ const Step5 = ({ nextStep, prevStep, wallet }) => {
         }
       );
       setLoading(false);
-      navigate("/home");
+      if (wallet.memnoic !== null || undefined) {
+        nextStep();
+      } else {
+        navigate("/home");
+      }
+      // console.log(wallet.memnoic);
     } catch (error) {
       console.log(error);
       setLoading(false);

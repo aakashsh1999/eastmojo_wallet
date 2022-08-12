@@ -1,7 +1,5 @@
-import dayjs from "dayjs";
 import React from "react";
-import { AiOutlineArrowUp } from "react-icons/ai";
-import { formatFromWei, shortAddress } from "../../../web3";
+import { formatFromWei } from "../../../web3";
 
 const AssetTab = ({ balances, account, currentNetwork }) => {
   return (

@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 import { useIndexedDB } from "react-indexed-db";
 import { STORENAME } from "../../utils/dbConfig";
 import Step5 from "./components/Step5";
+import Step6 from "./components/Step6";
+import Step7 from "./components/Step7";
 // import CryptoJS from "crypto-js";
 const Welcome = () => {
   const [steps, setSteps] = useState(0);
@@ -29,10 +31,10 @@ const Welcome = () => {
           }
         }
 
-        if (wallet && wallet.wallet) {
-          navigate("/home");
-          return;
-        }
+        // if (wallet && wallet.wallet) {
+        //   navigate("/home");
+        //   return;
+        // }
         if (wallet && wallet.wallet && wallet.active === false) {
           navigate("/login");
           return;
@@ -73,8 +75,12 @@ const Welcome = () => {
           setWallet={setWallet}
           wallet={wallet}
         />
-      ) : (
+      ) : steps === 4 ? (
         <Step5 nextStep={nextStep} prevStep={prevStep} wallet={wallet} />
+      ) : steps === 5 ? (
+        <Step6 nextStep={nextStep} prevStep={prevStep} wallet={wallet} />
+      ) : (
+        <Step7 nextStep={nextStep} prevStep={prevStep} wallet={wallet} />
       )}
     </div>
   );
