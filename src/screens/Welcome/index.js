@@ -31,10 +31,10 @@ const Welcome = () => {
           }
         }
 
-        // if (wallet && wallet.wallet) {
-        //   navigate("/home");
-        //   return;
-        // }
+        if (wallet && wallet.wallet) {
+          navigate("/home");
+          return;
+        }
         if (wallet && wallet.wallet && wallet.active === false) {
           navigate("/login");
           return;

@@ -14,11 +14,11 @@ import { AES } from "crypto-js";
 import { CRYPTOJSSECRET } from "../../utils";
 import CryptoJS from "crypto-js";
 const Home = () => {
-  const [account, setAccount] = useState(null);
+  const [account, setAccount] = useState({});
   const navigate = useNavigate();
   const { getByID } = useIndexedDB(STORENAME);
   const [balance, setBalance] = useState(0);
-  const [currentNetwork, setCurrentNetwork] = useState(null);
+  const [currentNetwork, setCurrentNetwork] = useState({});
 
   useEffect(() => {
     const getAccount = async () => {
@@ -76,6 +76,7 @@ const Home = () => {
         let balance = await getUserBalance(account.address);
         balance = Number(balance).toFixed(5);
         setBalance(balance);
+        // console.log(balance);
       } catch (error) {
         console.log(error);
       }
@@ -98,6 +99,7 @@ const Home = () => {
       );
       if (currentLocalNetwork) {
         setCurrentNetwork(JSON.parse(currentLocalNetwork));
+        // console.log(currentLocalNetwork);
       }
     }, 2000);
     return () => {
