@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import { MdSend, MdOutlineCallReceived } from "react-icons/md";
 import {
+  AiOutlineExclamationCircle,
   AiOutlineFieldTime,
   AiOutlineLogout,
   AiOutlineQrcode,
@@ -66,9 +67,14 @@ const Sidebar = ({ active, setActive, menuRef, account }) => {
       handler: () => navigate("/setting"),
     },
     {
-      text: "Support",
+      text: "About Us",
+      icon: <AiOutlineExclamationCircle />,
+      handler: () => navigate("/about"),
+    },
+    {
+      text: "Term & Conditions",
       icon: <BiSupport />,
-      handler: () => {},
+      handler: () => navigate("/term"),
     },
     {
       text: "Get your QR code",
