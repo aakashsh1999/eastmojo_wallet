@@ -7,11 +7,14 @@ import { AES } from "crypto-js";
 import { CRYPTOJSSECRET } from "../../../utils";
 import { useIndexedDB } from "react-indexed-db";
 import { STORENAME } from "../../../utils/dbConfig";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 const Step5 = ({ nextStep, prevStep, wallet }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [checked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [show, setShow] = useState(false);
+  const [show2, setShow2] = useState(false);
   const navigate = useNavigate();
   const { add } = useIndexedDB(STORENAME);
 
@@ -87,23 +90,39 @@ const Step5 = ({ nextStep, prevStep, wallet }) => {
         <label htmlFor="" className="block text-400">
           Password
         </label>
-        <input
-          type="password"
-          className="bg-transparent w-full mt-2 rounded-xl border-2 border-[#232424] py-3 focus:border-primary"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <div className="relative">
+          <input
+            type={show ? "text" : "password"}
+            className="bg-transparent w-full mt-2 rounded-xl border-2 border-[#232424] py-3 focus:border-primary"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button
+            className="absolute top-1/2 -translate-y-1/2 right-3 text-xl"
+            onClick={() => setShow((prev) => !prev)}
+          >
+            {show ? <FaEye /> : <FaEyeSlash />}
+          </button>
+        </div>
       </div>
-      <div className="mt-4 ">
-        <label htmlFor="" className="block text-400">
+      <div className="mt-4  relative">
+        <label htmlFor="" className="block text-400 mb-2">
           Confirm Password
         </label>
-        <input
-          type="password"
-          className="bg-transparent w-full mt-2 rounded-xl border-2 border-[#232424] py-3 focus:border-primary"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
+        <div className="relative">
+          <input
+            type={show2 ? "text" : "password"}
+            className="bg-transparent w-full  rounded-xl border-2 border-[#232424] py-3 focus:border-primary"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+          <button
+            className="absolute top-1/2 -translate-y-1/2 right-3 text-xl"
+            onClick={() => setShow2((prev) => !prev)}
+          >
+            {show2 ? <FaEye /> : <FaEyeSlash />}
+          </button>
+        </div>
       </div>
       <div className="mt-4 grid grid-flow-col gap-2 items-center justify-start">
         <input
@@ -114,7 +133,7 @@ const Step5 = ({ nextStep, prevStep, wallet }) => {
           value={checked}
           onChange={() => setChecked(!checked)}
         />
-        <label htmlFor="term" className="block text-muted-400">
+        <label htmlFor="term" className="block text-white">
           I agree to the Terms and conditions of BIT wallet.
         </label>
       </div>

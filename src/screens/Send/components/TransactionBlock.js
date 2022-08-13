@@ -52,7 +52,7 @@ const TransactionBlock = ({ transactions, account, currentNetwork }) => {
         })
       ) : (
         <div className="flex justify-center items-center">
-          <p c>Not Found</p>
+          <p>Not Found</p>
         </div>
       )}
     </div>

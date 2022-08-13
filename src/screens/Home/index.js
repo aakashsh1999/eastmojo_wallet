@@ -61,13 +61,13 @@ const Home = () => {
         navigate("/receive");
       },
     },
-    {
-      text: "Swap",
-      icon: <MdSwapHoriz />,
-      handler: () => {
-        navigate("/home");
-      },
-    },
+    // {
+    //   text: "Swap",
+    //   icon: <MdSwapHoriz />,
+    //   handler: () => {
+    //     navigate("/home");
+    //   },
+    // },
   ];
 
   useEffect(() => {
@@ -123,7 +123,7 @@ const Home = () => {
         <img src={polygon} className="w-10" alt="" />
         <p className="text-3xl">{balance} MATIC</p>
       </div>
-      <div className="grid grid-cols-3 gap-4 w-full mt-6">
+      <div className="grid grid-cols-2 gap-4 w-full mt-6">
         {data.map((val, i) => (
           <React.Fragment key={i}>
             <Button data={val} onClick={val.handler} />

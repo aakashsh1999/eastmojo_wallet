@@ -58,7 +58,7 @@ const Sidebar = ({ active, setActive, menuRef, account }) => {
     {
       text: "Recent transactions",
       icon: <AiOutlineFieldTime />,
-      handler: () => {},
+      handler: () => navigate("/send"),
     },
     {
       text: "Settings",
@@ -73,7 +73,7 @@ const Sidebar = ({ active, setActive, menuRef, account }) => {
     {
       text: "Get your QR code",
       icon: <AiOutlineQrcode />,
-      handler: () => {},
+      handler: () => navigate("/receive"),
     },
     {
       text: "Logout",
@@ -87,7 +87,8 @@ const Sidebar = ({ active, setActive, menuRef, account }) => {
       ref={menuRef}
       className={`fixed h-full bg-dark-600  max-w-[300px] w-full ${
         active ? "left-0" : "-left-full "
-      } top-0 left-0 rounded-r-3xl transition-all duration-300"`}
+      } top-0 left-0 rounded-r-3xl transition-all duration-300 "`}
+      style={{ zIndex: 100 }}
     >
       <div className="flex justify-end items-center p-8 text-2xl">
         <button

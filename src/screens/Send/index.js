@@ -17,7 +17,7 @@ import axios from "axios";
 import TransactionBlock from "./components/TransactionBlock";
 
 const Send = () => {
-  const [account, setAccount] = useState(null);
+  const [account, setAccount] = useState({});
   const navigate = useNavigate();
   const { getByID } = useIndexedDB(STORENAME);
   // eslint-disable-next-line no-unused-vars
@@ -26,7 +26,7 @@ const Send = () => {
   const [toAddress, setToAddress] = useState("");
   const [amount, setAmount] = useState("");
   const [transactions, setTransactions] = useState([]);
-  const [currentNetwork, setCurrentNetwork] = useState(null);
+  const [currentNetwork, setCurrentNetwork] = useState({});
 
   useEffect(() => {
     const getAccount = async () => {
@@ -66,28 +66,6 @@ const Send = () => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       let balance = await getUserBalance(account.address);
-  //       balance = Number(balance).toFixed(5);
-  //       // console.log("balance", balance);
-  //       setBalance(balance);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-
-  //   const intervalId = setInterval(() => {
-  //     if (account?.address) {
-  //       getData();
-  //     }
-  //   }, 2000);
-  //   return () => {
-  //     clearInterval(intervalId);
-  //   };
-  // }, [account]);
-
   useEffect(() => {
     const getData = async () => {
       const {
@@ -98,7 +76,7 @@ const Send = () => {
       // console.log(data);
       setTransactions(data.items);
     };
-    if (account?.address) {
+    if (account?.address && currentNetwork?.chain) {
       getData();
     }
   }, [account, currentNetwork]);
