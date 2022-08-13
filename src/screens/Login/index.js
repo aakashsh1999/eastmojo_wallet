@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import { useIndexedDB } from "react-indexed-db";
 import { STORENAME } from "../../utils/dbConfig";
 import { ethers } from "ethers";
@@ -75,11 +74,11 @@ const Login = () => {
   return (
     <div className="container ">
       <div className="min-h-screen flex flex-col justify-center">
-        <h2 className="max-w-[300px] text-muted  text-5xl font-extrabold  leading-[3.5rem] ">
+        <h2 className="max-w-[300px] text  text-5xl font-extrabold  leading-[3.5rem] ">
           Login
         </h2>
         <div className="mt-10">
-          <label htmlFor="" className="block text-muted-400">
+          <label htmlFor="" className="block text-400">
             Password
           </label>
           <input

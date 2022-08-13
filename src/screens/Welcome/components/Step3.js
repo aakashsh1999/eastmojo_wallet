@@ -46,7 +46,7 @@ const Step3 = ({ nextStep, prevStep, setWallet }) => {
           Import Wallet
         </button>
       </div>
-      <p className="text-muted-400 text-center mt-10">Term & Condition</p>
+      <p className="text-400 text-center mt-10">Terms & Condition</p>
     </div>
   );
 };
