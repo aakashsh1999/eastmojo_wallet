@@ -4,10 +4,12 @@ import { STORENAME } from "../../utils/dbConfig";
 import { ethers } from "ethers";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState("");
   const { getByID, update } = useIndexedDB(STORENAME);
+  const [show, setShow] = useState(false);
   const navigate = useNavigate();
   const handleSubmit = async () => {
     if (!password) {
@@ -81,12 +83,20 @@ const Login = () => {
           <label htmlFor="" className="block text-400">
             Password
           </label>
-          <input
-            type="password"
-            className="bg-transparent w-full mt-2 rounded-xl border-2 border-[#232424] py-3 focus:border-primary"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <div className="relative">
+            <input
+              type={show ? "text" : "password"}
+              className="bg-transparent w-full  rounded-xl border-2 border-[#232424] py-3 focus:border-primary"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button
+              className="absolute top-1/2 -translate-y-1/2 right-3 text-xl"
+              onClick={() => setShow((prev) => !prev)}
+            >
+              {show ? <FaEye /> : <FaEyeSlash />}
+            </button>
+          </div>
         </div>
 
         <button
