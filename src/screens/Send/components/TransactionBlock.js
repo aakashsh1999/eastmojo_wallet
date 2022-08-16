@@ -14,7 +14,7 @@ const TransactionBlock = ({ transactions, account, currentNetwork }) => {
             <a
               key={i}
               className="flex items-center justify-between py-2 hover:bg-gray-800 cursor-pointer p-2 rounded-md "
-              href={`${currentNetwork.explorer}/${txn.tx_hash}`}
+              href={`${currentNetwork.explorer}/tx/${txn.tx_hash}`}
               target="_blank"
               rel="noreferrer"
             >

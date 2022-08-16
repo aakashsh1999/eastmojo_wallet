@@ -87,6 +87,8 @@ const Send = () => {
       const { tx } = await sendCurrency(toAddress, amount, account);
       console.log(tx);
       setLoading(false);
+      setToAddress("");
+      setAmount("");
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -137,9 +139,11 @@ const Send = () => {
             } py-3 px-10 mt-4  rounded-xl flex justify-center  items-center max-w-max`}
           >
             <p>{loading ? "Please wait..." : " Send"}</p>
-            <p className="ml-2 ">
-              <MdSend />
-            </p>
+            {!loading && (
+              <p className="ml-2 ">
+                <MdSend />
+              </p>
+            )}
           </button>
           <p className="font-bold text-xl mt-6 text-[#666262]">
             Recent transactions

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaTimes } from "react-icons/fa";
+import { FaQuestion, FaTimes } from "react-icons/fa";
 import { MdSend, MdOutlineCallReceived } from "react-icons/md";
 import {
   AiOutlineExclamationCircle,
@@ -75,6 +75,11 @@ const Sidebar = ({ active, setActive, menuRef, account }) => {
       text: "Term & Conditions",
       icon: <BiSupport />,
       handler: () => navigate("/term"),
+    },
+    {
+      text: "Privacy Policy",
+      icon: <FaQuestion />,
+      handler: () => navigate("/privacypolicy"),
     },
     {
       text: "Get your QR code",

@@ -13,20 +13,35 @@ const About = () => {
         About Us
       </h2>
       <div className="mt-10">
+        <b className="text-lg mb-2 block">
+          About Beyond Imagination Technologies
+        </b>
         <p className=" text-white">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint non est
-          porro iure ipsum nemo hic ea voluptate voluptates nihil quia nobis
-          debitis delectus, sed excepturi quidem eaque culpa veritatis placeat
-          blanditiis dicta dolores quis a itaque? Possimus quibusdam et
-          temporibus totam mollitia cupiditate quo obcaecati. Hic repudiandae
+          Beyond Imagination Technologies (BIT) was founded as the first Indian
+          start-up with the idea of nurturing the Blockchain/Web3 technology and
+          building cost-effective, safe and secure solutions that fit the market
+          needs and help address the major market problems in all possible
+          classes and verticals of organisations, thereby creating a conducive
+          environment for its fair growth and development in India.
           <br />
           <br />
-          eaque provident nostrum, maxime, laudantium quas nisi unde ipsum alias
-          necessitatibus officia quidem vel! Minima reprehenderit accusantium
-          dolore cum natus inventore pariatur temporibus! Minus pariatur veniam
-          voluptas! Aperiam quas ipsam inventore, ipsa excepturi vel a cumque
-          voluptatibus consectetur facere rem officia vero consequatur fuga
-          iusto minima sit, nam sint iure! Vitae, fuga.
+          Within a short span, Beyond Imagination has grown in leaps and bounds.
+          They have signed joint development programs with highly esteemed
+          institutions in India within a few months of starting operations and
+          are also increasingly engaging with large corporations, high-net-worth
+          individuals, and big institutions. Enabling a cost-effective and easy
+          transition for users from web 2.0 to web 3.0 has been one of the major
+          reasons for their success. They have successfully bridged the gap
+          between market need and the use of blockchain-aided solutions for
+          sustainable business growth by providing tailored solutions to
+          start-ups, enterprises, and governments and helping them solve pain
+          points in their ecosystems .
+          <br />
+          <br />
+          Currently, BIT has many pilots and production-ready applications such
+          as Smart Contracting, Credential Management, and Digital Certificate
+          Issuing Platform, to name a few, tailored for different sectors and
+          government bodies.
         </p>
       </div>
     </div>

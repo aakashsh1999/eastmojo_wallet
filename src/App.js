@@ -15,6 +15,7 @@ import Receive from "./screens/Receive";
 import Setting from "./screens/Settings";
 import Term from "./screens/Terms";
 import About from "./screens/About";
+import Privacy from "./screens/Privacy";
 initDB(DBConfig);
 const App = () => {
   useEffect(() => {
@@ -43,6 +44,7 @@ const App = () => {
         <Route path="setting" element={<Setting />} />
         <Route path="/term" element={<Term />} />
         <Route path="/about" element={<About />} />
+        <Route path="/privacypolicy" element={<Privacy />} />
       </Routes>
     </div>
   );

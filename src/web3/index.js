@@ -158,13 +158,21 @@ export const sendCurrency = async (toAddress, amount, wallet) => {
 
   let signer = new ethers.Wallet(wallet.privateKey, provider);
 
+  // const nonce = await signer.getTransactionCount(wallet.address, "latest");
+  // const gasPrice = await signer.getGasPrice();
+  // // console.log(gasPrice);
+  // const gasLimit = "100000";
   let txObject = {
     to: toAddress,
     value: ethers.utils.parseEther(amount),
+    // gasPrice: gasPrice,
+    // gasLimit: ethers.utils.hexlify(gasLimit),
+    // nonce,
   };
 
   console.log(txObject);
 
+  // return;
   try {
     const tx = await signer.sendTransaction(txObject);
     toast.loading("Please wait we are getting confirmation from blockchain", {
