@@ -116,7 +116,7 @@ const Send = () => {
               type="number"
               className="bg-[#1F1F20] w-full  rounded-xl py-3 px-4 border-none focus:border-none focus:ring-0 text-right text-xl  font-bold min-h-[60px] pl-36"
               value={amount}
-              placeholder="100"
+              placeholder="0"
               onChange={(e) => setAmount(e.target.value)}
             />
           </div>
