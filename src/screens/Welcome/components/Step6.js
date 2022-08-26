@@ -4,7 +4,7 @@ import { BiLockAlt } from "react-icons/bi";
 
 const Step6 = ({ nextStep, prevStep, wallet }) => {
   const [show, setShow] = useState(false);
-
+  // console.log(wallet);
   const clickHandler = () => {
     if (!show) {
       setShow(true);

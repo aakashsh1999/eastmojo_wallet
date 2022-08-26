@@ -15,13 +15,19 @@ const Nfts = ({ token }) => {
 
     getData();
   }, []);
+
+  // console.log(tokenData.image?.startsWith("http"));
   return (
     <div className="bg-dark-600 p-2 rounded-md overflow-hidden">
       <img
-        src={`https://ipfs.io/ipfs/${tokenData?.image?.substr(
-          5,
-          tokenData?.image?.length
-        )}`}
+        src={
+          tokenData.image?.startsWith("http")
+            ? tokenData.image
+            : `https://ipfs.io/ipfs/${tokenData?.image?.substr(
+                5,
+                tokenData?.image?.length
+              )}`
+        }
         alt=""
       />
     </div>

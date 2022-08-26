@@ -65,7 +65,9 @@ const Step5 = ({ nextStep, prevStep, wallet }) => {
         }
       );
       setLoading(false);
-      if (wallet.memnoic !== null || undefined) {
+      // console.log("memnoic", memnoic);
+
+      if (memnoic !== null || undefined) {
         nextStep();
       } else {
         navigate("/home");
