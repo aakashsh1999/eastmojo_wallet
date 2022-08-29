@@ -13,6 +13,8 @@ import { STORENAME } from "../../utils/dbConfig";
 import { AES } from "crypto-js";
 import { CRYPTOJSSECRET } from "../../utils";
 import CryptoJS from "crypto-js";
+import Clipboard from "react-clipboard.js";
+import toast from "react-hot-toast";
 const Home = () => {
   const [account, setAccount] = useState({});
   const navigate = useNavigate();
@@ -114,9 +116,14 @@ const Home = () => {
         <p>Account 1</p>
         <div className="grid grid-flow-col justify-center items-center gap-2">
           <p>{shortAddress(account?.address)}</p>
-          <button onClick={() => copyToClipBoard(account?.address)}>
-            <FiCopy className="text-xl text-primary" />
-          </button>
+          <Clipboard
+            data-clipboard-text={account?.address}
+            onSuccess={() => toast.success("copied to clipboard")}
+          >
+            <button>
+              <FiCopy className="text-xl text-primary" />
+            </button>
+          </Clipboard>
         </div>
       </div>
       <div className="bg-dark-600 p-3 mt-4 rounded-xl grid grid-flow-col justify-center gap-5 items-center py-6">

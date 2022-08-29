@@ -14,7 +14,7 @@ const Nfts = ({ token }) => {
     };
 
     getData();
-  }, []);
+  }, [token?.tokenUri?.gateway]);
 
   // console.log(tokenData.image?.startsWith("http"));
   return (

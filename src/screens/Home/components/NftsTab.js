@@ -28,7 +28,7 @@ const NftsTab = ({ balances, account, currentNetwork }) => {
     if (account?.address) {
       getData();
     }
-  }, [account?.address]);
+  }, [account?.address, alchemy.nft, account]);
 
   return (
     <div className="">
