@@ -5,66 +5,20 @@ import Header from "../../components/Header";
 import { MdSend } from "react-icons/md";
 
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { sendCurrency } from "../../web3";
 
-import { useIndexedDB } from "react-indexed-db";
-import { STORENAME } from "../../utils/dbConfig";
-import { AES } from "crypto-js";
-import { APIKEYCOVLANT, BASECOVALENT, CRYPTOJSSECRET } from "../../utils";
-import CryptoJS from "crypto-js";
+import { APIKEYCOVLANT, BASECOVALENT } from "../../utils";
+
 import axios from "axios";
 import TransactionBlock from "./components/TransactionBlock";
-
+import { useSelector } from "react-redux";
 const Send = () => {
-  const [account, setAccount] = useState({});
-  const navigate = useNavigate();
-  const { getByID } = useIndexedDB(STORENAME);
-  // eslint-disable-next-line no-unused-vars
-  // const [balance, setBalance] = useState(0);
+  const { account, currentNetwork } = useSelector((state) => state.wallet);
+
   const [loading, setLoading] = useState(false);
   const [toAddress, setToAddress] = useState("");
   const [amount, setAmount] = useState("");
   const [transactions, setTransactions] = useState([]);
-  const [currentNetwork, setCurrentNetwork] = useState({});
-
-  useEffect(() => {
-    const getAccount = async () => {
-      try {
-        const wallet = await getByID(1);
-        if (!wallet || !wallet.wallet) {
-          navigate("/");
-          return;
-        }
-        if (wallet && wallet.wallet && wallet.active === false) {
-          navigate("/login");
-          return;
-        }
-
-        const bytes = AES.decrypt(wallet.wallet, CRYPTOJSSECRET);
-        const originalWallet = bytes.toString(CryptoJS.enc.Utf8);
-        setAccount(JSON.parse(originalWallet));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    getAccount();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [navigate]);
-  useEffect(() => {
-    const id = setInterval(() => {
-      const currentLocalNetwork = window.localStorage.getItem(
-        "bit-current-network"
-      );
-      if (currentLocalNetwork) {
-        setCurrentNetwork(JSON.parse(currentLocalNetwork));
-      }
-    }, 2000);
-    return () => {
-      clearInterval(id);
-    };
-  }, []);
 
   useEffect(() => {
     const getData = async () => {
@@ -97,16 +51,8 @@ const Send = () => {
 
   return (
     <div className="relative container py-10 ">
-      <Header account={account} />
-      {/* <div className="rounded-lg flex bg-dark-600 p-3 justify-between items-center mt-8">
-        <p>Account 1</p>
-        <div className="grid grid-flow-col justify-center items-center gap-2">
-          <p>{shortAddress(account?.address)}</p>
-          <button onClick={() => copyToClipBoard(account?.address)}>
-            <FiCopy className="text-xl text-primary" />
-          </button>
-        </div>
-      </div> */}
+      <Header />
+
       <div>
         <div className="mt-5 grid gap-4">
           <div className="relative mt-10">

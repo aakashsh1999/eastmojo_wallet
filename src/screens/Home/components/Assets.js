@@ -1,45 +1,10 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { APIKEYCOVLANT, BASECOVALENT } from "../../../utils";
-import ActivityTab from "./ActivityTab";
+import React, { useState } from "react";
 import AssetTab from "./AssetTab";
 import NftsTab from "./NftsTab";
-// import dummy1 from "../../../assets/nfts/dummy1.png";
-// import dummy2 from "../../../assets/nfts/dummy2.png";
-const Assets = ({ currentNetwork, account }) => {
-  const [currentActive, setCurrentActive] = useState(0);
-  const [transactions, setTransactions] = useState(null);
-  const [balances, setBalances] = useState(null);
 
+const Assets = () => {
+  const [currentActive, setCurrentActive] = useState(0);
   const tabs = ["NFT's", "Assets"];
-  useEffect(() => {
-    const getData = async () => {
-      const {
-        data: { data },
-      } = await axios.get(
-        `${BASECOVALENT}/${currentNetwork.chain}/address/${account?.address}/transactions_v2/?key=${APIKEYCOVLANT}`
-      );
-      // console.log(data);
-      setTransactions(data.items);
-    };
-    if (account?.address && currentNetwork.chain) {
-      getData();
-    }
-  }, [account, currentNetwork]);
-  useEffect(() => {
-    const getData = async () => {
-      const {
-        data: { data },
-      } = await axios.get(
-        `${BASECOVALENT}/${currentNetwork.chain}/address/${account?.address}/balances_v2/?key=${APIKEYCOVLANT}`
-      );
-      // console.log(data);
-      setBalances(data.items);
-    };
-    if (account?.address && currentNetwork.chain) {
-      getData();
-    }
-  }, [account, currentNetwork]);
 
   return (
     <div>
@@ -57,24 +22,7 @@ const Assets = ({ currentNetwork, account }) => {
         ))}
       </div>
       <div className="mt-6">
-        {currentActive === 1 ? (
-          <AssetTab
-            balances={balances}
-            account={account}
-            currentNetwork={currentNetwork}
-          />
-        ) : (
-          // <ActivityTab
-          //   transactions={transactions}
-          //   account={account}
-          //   currentNetwork={currentNetwork}
-          // />
-          <NftsTab
-            balances={balances}
-            account={account}
-            currentNetwork={currentNetwork}
-          />
-        )}
+        {currentActive === 1 ? <AssetTab /> : <NftsTab />}
       </div>
     </div>
   );

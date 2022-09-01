@@ -5,11 +5,14 @@ import { AiOutlineCaretDown } from "react-icons/ai";
 import { NETWORKS } from "../utils";
 import Sidebar from "./Sidebar";
 import { Link } from "react-router-dom";
-const Header = ({ account }) => {
+import { useDispatch, useSelector } from "react-redux";
+import { walletActions } from "../store/wallet/wallet-slice";
+const Header = () => {
+  const dispatch = useDispatch();
+  const { account, currentNetwork } = useSelector((state) => state.wallet);
   const [active, setActive] = useState(false);
   const menuRef = useRef(null);
   const headerRef = useRef(null);
-  const [currentNetwork, setCurrentNetwork] = useState({});
   const [showmodal, setShowmodal] = useState(false);
   useEffect(() => {
     const handler = (e) => {
@@ -27,17 +30,9 @@ const Header = ({ account }) => {
     };
   }, []);
 
-  useEffect(() => {
-    const currentLocalNetwork = window.localStorage.getItem(
-      "bit-current-network"
-    );
-    if (currentLocalNetwork) {
-      setCurrentNetwork(JSON.parse(currentLocalNetwork));
-    }
-  }, [showmodal]);
-
   const setLocalNetwork = async (val) => {
     localStorage.setItem("bit-current-network", JSON.stringify(val));
+    dispatch(walletActions.setCurrentNetwork(val));
     setShowmodal(false);
   };
 

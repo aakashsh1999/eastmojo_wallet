@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { FaQuestion, FaTimes } from "react-icons/fa";
 import { MdSend, MdOutlineCallReceived } from "react-icons/md";
 import {
@@ -9,35 +9,14 @@ import {
   AiTwotoneSetting,
 } from "react-icons/ai";
 import { BiSupport } from "react-icons/bi";
-import { getUserBalance } from "../web3";
 import { useIndexedDB } from "react-indexed-db";
 import { STORENAME } from "../utils/dbConfig";
 import { useNavigate } from "react-router-dom";
-const Sidebar = ({ active, setActive, menuRef, account }) => {
-  const [balance, setBalance] = useState(0);
+import { useSelector } from "react-redux";
+const Sidebar = ({ active, setActive, menuRef }) => {
+  const { balance } = useSelector((state) => state.wallet);
   const { getByID, update } = useIndexedDB(STORENAME);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        let balance = await getUserBalance(account.address);
-        balance = Number(balance).toFixed(5);
-        setBalance(balance);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    const intervalId = setInterval(() => {
-      if (account?.address) {
-        getData();
-      }
-    }, 2000);
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [account]);
 
   const logOut = async () => {
     try {

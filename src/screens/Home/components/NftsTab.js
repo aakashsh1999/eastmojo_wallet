@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { ALCHEMYKEY } from "../../../utils";
 // import { formatFromWei } from "../../../web3";
 import Nfts from "./Nfts";
+import { useSelector } from "react-redux";
 const { Network, Alchemy } = require("alchemy-sdk");
 
-const NftsTab = ({ balances, account, currentNetwork }) => {
+const NftsTab = () => {
+  const { account, currentNetwork } = useSelector((state) => state.wallet);
   const [nfts, setNfts] = useState([]);
   const settings = {
     apiKey: ALCHEMYKEY, // Replace with your Alchemy API Key.
@@ -13,13 +15,13 @@ const NftsTab = ({ balances, account, currentNetwork }) => {
         ? Network.MATIC_MAINNET
         : Network.MATIC_MUMBAI, // Replace with your network.
   };
-  //   console.log(Network);
+
   const alchemy = new Alchemy(settings);
   useEffect(() => {
     const getData = async () => {
       try {
         const nfts = await alchemy.nft.getNftsForOwner(account?.address);
-
+        // console.log("NFTS", nfts);
         setNfts(nfts.ownedNfts);
       } catch (error) {
         console.log(error);
@@ -28,13 +30,14 @@ const NftsTab = ({ balances, account, currentNetwork }) => {
     if (account?.address) {
       getData();
     }
-  }, [account?.address, account, alchemy.nft]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account?.address, currentNetwork]);
 
   return (
     <div className="">
       {nfts?.length > 0 ? (
         <div className="grid grid-cols-2 gap-4 max-h-[400px] overflow-y-auto">
-          {nfts.slice(0, 5).map((asset, i) => {
+          {nfts.map((asset, i) => {
             return (
               <React.Fragment key={i}>
                 <Nfts token={asset} />

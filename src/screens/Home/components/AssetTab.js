@@ -1,11 +1,30 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { APIKEYCOVLANT, BASECOVALENT } from "../../../utils";
 import { formatFromWei } from "../../../web3";
+import { useSelector } from "react-redux";
+const AssetTab = () => {
+  const [balances, setBalances] = useState(null);
+  const { account, currentNetwork } = useSelector((state) => state.wallet);
 
-const AssetTab = ({ balances, account, currentNetwork }) => {
+  useEffect(() => {
+    const getData = async () => {
+      const {
+        data: { data },
+      } = await axios.get(
+        `${BASECOVALENT}/${currentNetwork.chain}/address/${account?.address}/balances_v2/?key=${APIKEYCOVLANT}`
+      );
+      // console.log(data);
+      setBalances(data.items);
+    };
+    if (account?.address && currentNetwork.chain) {
+      getData();
+    }
+  }, [account, currentNetwork]);
   return (
     <div className="">
       {balances?.length > 0 ? (
-        balances.slice(0, 5).map((asset, i) => {
+        balances.map((asset, i) => {
           return (
             <div className="flex justify-between py-2" key={i}>
               <div className="grid  grid-flow-col justify-start items-center gap-2">

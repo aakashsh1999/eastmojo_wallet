@@ -20,7 +20,6 @@ const Login = () => {
     setLoading(true);
     try {
       const wallet = await getByID(1);
-      console.log(wallet);
       if (!wallet.jsonwallet) {
         setLoading(false);
         toast.error("something went wrong");

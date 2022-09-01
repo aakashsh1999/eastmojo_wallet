@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import "./App.css";
 import Welcome from "./screens/Welcome";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Home from "./screens/Home";
@@ -16,8 +16,19 @@ import Setting from "./screens/Settings";
 import Term from "./screens/Terms";
 import About from "./screens/About";
 import Privacy from "./screens/Privacy";
+import { useDispatch } from "react-redux";
+import { walletActions } from "./store/wallet/wallet-slice";
+import { useIndexedDB } from "react-indexed-db";
+import { STORENAME } from "./utils/dbConfig";
+import { CRYPTOJSSECRET } from "./utils";
+import { AES } from "crypto-js";
+import CryptoJS from "crypto-js";
 initDB(DBConfig);
 const App = () => {
+  const dispatch = useDispatch();
+  const { getByID } = useIndexedDB(STORENAME);
+  const navigate = useNavigate();
+
   useEffect(() => {
     try {
       const isNetworkSet = window.localStorage.getItem("bit-current-network");
@@ -26,11 +37,40 @@ const App = () => {
           "bit-current-network",
           JSON.stringify(NETWORKS[0])
         );
+        dispatch(walletActions.setCurrentNetwork(NETWORKS[0]));
+        return;
       }
+      dispatch(walletActions.setCurrentNetwork(JSON.parse(isNetworkSet)));
     } catch (error) {
       console.log(error);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const getAccount = async () => {
+      try {
+        const wallet = await getByID(1);
+        if (!wallet || !wallet.wallet) {
+          navigate("/");
+          return;
+        }
+        if (wallet && wallet.wallet && wallet.active === false) {
+          navigate("/login");
+          return;
+        }
+
+        const bytes = AES.decrypt(wallet.wallet, CRYPTOJSSECRET);
+        const originalWallet = bytes.toString(CryptoJS.enc.Utf8);
+        dispatch(walletActions.setAccount(JSON.parse(originalWallet)));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getAccount();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigate]);
 
   return (
     <div className=" bg-dark min-h-screen text-white">
