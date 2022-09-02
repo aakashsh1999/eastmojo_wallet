@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import FileSaver from "file-saver";
+import { MdDownload } from "react-icons/md";
 const Nfts = ({ token }) => {
   const [tokenData, setTokenData] = useState({});
   const [error, setError] = useState(false);
@@ -24,7 +26,23 @@ const Nfts = ({ token }) => {
           Fetch Error
         </div>
       ) : (
-        <div className="bg-dark-600 p-2 rounded-md overflow-hidden h-[150px]">
+        <div className="relative bg-dark-600 p-2 rounded-md overflow-hidden h-[150px]">
+          <button
+            className="absolute bg-dark-600 h-5 w-5 rounded-full bottom-3 right-3 flex justify-center items-center text-white"
+            onClick={() =>
+              FileSaver.saveAs(
+                tokenData.image?.startsWith("http")
+                  ? tokenData.image
+                  : `https://ipfs.io/ipfs/${tokenData?.image?.substr(
+                      5,
+                      tokenData?.image?.length
+                    )}`,
+                "image.png"
+              )
+            }
+          >
+            <MdDownload />
+          </button>
           <img
             className="h-full w-full"
             src={
