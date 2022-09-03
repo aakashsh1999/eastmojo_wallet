@@ -31,7 +31,7 @@ const Nfts = ({ token }) => {
       ) : (
         <div
           onClick={() => setOpen(true)}
-          className="relative bg-dark-600 p-2 rounded-md overflow-hidden h-[150px]"
+          className="relative bg-dark-600 p-2 rounded-md overflow-hidden h-[150px] cursor-pointer"
         >
           <img
             className="h-full w-full"
