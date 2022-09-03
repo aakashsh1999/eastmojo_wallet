@@ -31,7 +31,7 @@ const NftsTab = () => {
       getData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account?.address, currentNetwork]);
+  }, [account?.address, currentNetwork?.chain]);
 
   return (
     <div className="">
