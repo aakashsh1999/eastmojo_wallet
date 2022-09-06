@@ -1,26 +1,26 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import FileSaver from "file-saver";
-import { MdDownload } from "react-icons/md";
+
 import NftDetailsModal from "../../../components/NftDetailsModal";
 const Nfts = ({ token }) => {
   const [tokenData, setTokenData] = useState({});
   const [error, setError] = useState(false);
   const [open, setOpen] = React.useState(false);
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const { data } = await axios.get(token.tokenUri.gateway);
-        setTokenData(data);
-        console.log(data);
-      } catch (error) {
-        console.log(error);
-        setError(true);
-      }
-    };
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     try {
+  //       const { data } = await axios.get(token.tokenUri.gateway);
+  //       setTokenData(data);
+  //       console.log(data);
+  //     } catch (error) {
+  //       console.log(error);
+  //       setError(true);
+  //     }
+  //   };
 
-    getData();
-  }, [token?.tokenUri?.gateway]);
+  //   getData();
+  // }, [token?.tokenUri?.gateway]);
 
   return (
     <>
@@ -35,19 +35,17 @@ const Nfts = ({ token }) => {
         >
           <img
             className="h-full w-full"
-            src={
-              tokenData.image?.startsWith("http")
-                ? tokenData.image
-                : `https://ipfs.io/ipfs/${tokenData?.image?.substr(
-                    5,
-                    tokenData?.image?.length
-                  )}`
-            }
+            src={token?.media[0]?.gateway}
             alt=""
           />
         </div>
       )}
-      <NftDetailsModal open={open} setOpen={setOpen} tokenData={tokenData} />
+      <NftDetailsModal
+        open={open}
+        setOpen={setOpen}
+        // tokenData={tokenData}
+        token={token}
+      />
     </>
   );
 };

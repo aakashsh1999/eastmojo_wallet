@@ -1,8 +1,9 @@
 import Web3 from "web3";
 import { PROVIDER } from "../utils";
-import { stakeAbi, stakeAddress } from "./contracts/staking";
-import { tokenAbi, tokenAddress } from "./contracts/token";
+// import { stakeAbi, stakeAddress } from "./contracts/staking";
+// import { tokenAbi, tokenAddress } from "./contracts/token";
 // import toast from "react-hot-toast";
+import { NFT_TRANSFER_ABI } from "./contracts/NFT_TRANSFER";
 import { ethers } from "ethers";
 import toast from "react-hot-toast";
 import { formatEther } from "ethers/lib/utils";
@@ -69,12 +70,12 @@ export const getWeb3 = async () => {
   }
 };
 
-export const getDecimal = async () => {
-  // eslint-disable-next-line no-unused-vars
-  const { ok, contract: tokenContract } = await getContract(tokenAddress);
-  let decimal = await tokenContract.methods.decimals().call();
-  return decimal;
-};
+// export const getDecimal = async () => {
+//   // eslint-disable-next-line no-unused-vars
+//   const { ok, contract: tokenContract } = await getContract(tokenAddress);
+//   let decimal = await tokenContract.methods.decimals().call();
+//   return decimal;
+// };
 
 export const createAccount = async () => {
   const web3 = await getWeb3();
@@ -96,9 +97,8 @@ export const getProvider = async () => {
     const localProvider = JSON.parse(
       localStorage.getItem("bit-current-network")
     );
-    // console.log(localProvider);
     if (!localProvider) {
-      return 0;
+      return null;
     }
     const provider = new ethers.providers.JsonRpcProvider(localProvider.rpc);
     return provider;
@@ -107,22 +107,6 @@ export const getProvider = async () => {
   }
 };
 
-export const getContract = async (token) => {
-  try {
-    const web3 = await getWeb3();
-
-    let contract = null;
-    if (token) {
-      contract = new web3.eth.Contract(tokenAbi, token);
-    } else {
-      contract = new web3.eth.Contract(stakeAbi, stakeAddress);
-    }
-    return { contract: contract, ok: true };
-  } catch (error) {
-    console.log(error);
-    return { ok: false, contract: null };
-  }
-};
 export const getCustomContract = async (abi, address) => {
   try {
     const web3 = await getWeb3();
@@ -158,27 +142,85 @@ export const sendCurrency = async (toAddress, amount, wallet) => {
 
   let signer = new ethers.Wallet(wallet.privateKey, provider);
 
-  // const nonce = await signer.getTransactionCount(wallet.address, "latest");
-  // const gasPrice = await signer.getGasPrice();
-  // // console.log(gasPrice);
-  // const gasLimit = "100000";
   let txObject = {
     to: toAddress,
     value: ethers.utils.parseEther(amount),
-    // gasPrice: gasPrice,
-    // gasLimit: ethers.utils.hexlify(gasLimit),
-    // nonce,
   };
 
   console.log(txObject);
 
-  // return;
   try {
     const tx = await signer.sendTransaction(txObject);
     toast.loading("Please wait we are getting confirmation from blockchain", {
       id: toastId,
     });
     console.log(tx);
+    const hash = await tx.wait();
+    toast.success("Transaction completed successfully!", { id: toastId });
+    return { tx: hash, ok: true };
+  } catch (error) {
+    console.log(error);
+    toast.error("Something went wrong", { id: toastId });
+    return { tx: null, ok: false };
+  }
+};
+
+export const transferNft = async (nftAddress, tokenId, toAddress, wallet) => {
+  console.log(nftAddress, tokenId, toAddress, wallet);
+  const isValid = checkAddress(toAddress);
+  if (!isValid) {
+    toast.error("Not a valid address, Please Input a valid address");
+    return { tx: null, ok: false };
+  }
+  const provider = await getProvider();
+  if (!provider) {
+    toast.error("Something went wrong");
+    return { tx: null, ok: false };
+  }
+  const bal = await provider.getBalance(wallet.address);
+  const realBal = formatEther(bal.toString());
+  if (!realBal) {
+    toast.error("You dont have balance to do transactions");
+    return;
+  }
+  const toastId = toast.loading("Transaction processing..");
+
+  let signer = new ethers.Wallet(wallet.privateKey, provider);
+  //Get gas price
+  const gasPrice = await provider.getGasPrice();
+
+  //Estimate gas limit
+
+  try {
+    const nftContract = new ethers.Contract(
+      nftAddress,
+      NFT_TRANSFER_ABI,
+      signer
+    );
+    const gasLimit = await nftContract.estimateGas[
+      "safeTransferFrom(address,address,uint256)"
+    ](wallet.address, toAddress, tokenId, { gasPrice });
+    //Call the safetransfer method
+    const transaction = await nftContract[
+      "safeTransferFrom(address,address,uint256)"
+    ](wallet.address, toAddress, tokenId, { gasLimit });
+
+    //Wait for the transaction to complete
+    await transaction.wait();
+    console.log("Transaction Hash: ", transaction.hash);
+
+    // const nftContract = nftContractReadonly.connect(signer);
+    // console.log(nftContract);
+    // console.log(nftContract.safeTransferFrom);
+    return { tx: null, ok: false };
+    const tx = await nftContract.safeTransferFrom(
+      wallet.address,
+      toAddress,
+      tokenId
+    );
+    toast.loading("Please wait we are getting confirmation from blockchain", {
+      id: toastId,
+    });
     const hash = await tx.wait();
     toast.success("Transaction completed successfully!", { id: toastId });
     return { tx: hash, ok: true };
