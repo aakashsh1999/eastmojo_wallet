@@ -4,9 +4,11 @@ import Modal from "@mui/material/Modal";
 import FileSaver from "file-saver";
 import { MdDownload, MdSend } from "react-icons/md";
 import { FaTimes } from "react-icons/fa";
-import Button from "./Button";
+// import Button from "./Button";
 import { transferNft } from "../web3";
 import { useSelector } from "react-redux";
+// import download from "image-downloader";
+// import saveImage from "save-image";
 const style = {
   position: "absolute",
   top: "50%",
@@ -51,6 +53,26 @@ export default function NftDetailsModal({ open, setOpen, token }) {
     }
   };
 
+  const download = (img) => {
+    console.log(img);
+    fetch(img, {
+      method: "GET",
+      headers: {},
+    })
+      .then((response) => {
+        response.arrayBuffer().then(function (buffer) {
+          const url = window.URL.createObjectURL(new Blob([buffer]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", "image.png"); //or any other extension
+          document.body.appendChild(link);
+          link.click();
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <>
       <Modal
@@ -72,9 +94,7 @@ export default function NftDetailsModal({ open, setOpen, token }) {
                 <>
                   <button
                     className="absolute bg-dark-600 h-6 w-6 rounded-full bottom-3 right-3 flex justify-center items-center text-white text-2xl"
-                    onClick={() =>
-                      FileSaver.saveAs(token?.media[0]?.gateway, "image.png")
-                    }
+                    onClick={async () => download(token?.media[0]?.gateway)}
                   >
                     <MdDownload />
                   </button>
