@@ -29,7 +29,7 @@ export default function NftDetailsModal({ open, setOpen, token }) {
   const handleClose = () => {
     setOpen(false);
   };
-  console.log(token);
+  // console.log(token);
 
   const transferNFT = async () => {
     try {
@@ -41,8 +41,8 @@ export default function NftDetailsModal({ open, setOpen, token }) {
         account
       );
       console.log(tx);
+      setLoading(false);
       if (ok) {
-        setLoading(false);
         setToAddress("");
         handleClose();
         setTimeout(() => window.location.reload(), 5000);

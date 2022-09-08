@@ -4,7 +4,7 @@ import { PROVIDER } from "../utils";
 // import { tokenAbi, tokenAddress } from "./contracts/token";
 // import toast from "react-hot-toast";
 import { NFT_TRANSFER_ABI } from "./contracts/NFT_TRANSFER";
-import { ethers } from "ethers";
+import { ethers, providers } from "ethers";
 import toast from "react-hot-toast";
 import { formatEther } from "ethers/lib/utils";
 
@@ -166,7 +166,7 @@ export const sendCurrency = async (toAddress, amount, wallet) => {
 };
 
 export const transferNft = async (nftAddress, tokenId, toAddress, wallet) => {
-  console.log(nftAddress, tokenId, toAddress, wallet);
+  // console.log(nftAddress, tokenId, toAddress, wallet);
   const isValid = checkAddress(toAddress);
   if (!isValid) {
     toast.error("Not a valid address, Please Input a valid address");
@@ -192,32 +192,52 @@ export const transferNft = async (nftAddress, tokenId, toAddress, wallet) => {
   //Estimate gas limit
 
   try {
-    const nftContract = new ethers.Contract(
+    const nftContractReadonly = new ethers.Contract(
       nftAddress,
       NFT_TRANSFER_ABI,
-      signer
+      provider
     );
-    const gasLimit = await nftContract.estimateGas[
-      "safeTransferFrom(address,address,uint256)"
-    ](wallet.address, toAddress, tokenId, { gasPrice });
-    //Call the safetransfer method
-    const transaction = await nftContract[
-      "safeTransferFrom(address,address,uint256)"
-    ](wallet.address, toAddress, tokenId, { gasLimit });
+    // const gasLimit = await nftContract.estimateGas[
+    //   "safeTransferFrom(address,address,uint256)"
+    // ](wallet.address, toAddress, tokenId, { gasPrice });
+    // console.log(gasLimit);
+    // //Call the safetransfer method
+    // const transaction = await nftContract[
+    //   "safeTransferFrom(address,address,uint256)"
+    // ](wallet.address, toAddress, tokenId, { gasLimit: 210000 });
 
-    //Wait for the transaction to complete
-    await transaction.wait();
-    console.log("Transaction Hash: ", transaction.hash);
+    // //Wait for the transaction to complete
+    // await transaction.wait();
+    // console.log("Transaction Hash: ", transaction.hash);
 
-    // const nftContract = nftContractReadonly.connect(signer);
-    // console.log(nftContract);
+    const nftContract = nftContractReadonly.connect(signer);
+    console.log(nftContract);
     // console.log(nftContract.safeTransferFrom);
-    return { tx: null, ok: false };
-    const tx = await nftContract.safeTransferFrom(
+    // toast.error("Something went wrong", { id: toastId });
+
+    // return { tx: null, ok: false };
+    // const tx = await nftContract.safeTransferFrom(
+    //   wallet.address,
+    //   toAddress,
+    //   tokenId
+    // );
+
+    // const gasLimit = await nftContract.estimateGas[
+    //   "safeTransferFrom(address,address,uint256)"
+    // ](wallet.address, toAddress, tokenId, { gasPrice });
+    //Call the safetransfer method
+    console.log(nftAddress, tokenId);
+    const tx = await nftContract["safeTransferFrom(address,address,uint256)"](
       wallet.address,
       toAddress,
-      tokenId
+      tokenId,
+      {
+        gasLimit: "3000000000",
+      }
     );
+    //Wait for the transaction to complete
+    // await transaction.wait();
+
     toast.loading("Please wait we are getting confirmation from blockchain", {
       id: toastId,
     });
