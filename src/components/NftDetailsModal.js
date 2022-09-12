@@ -114,7 +114,7 @@ export default function NftDetailsModal({ open, setOpen, token }) {
                         : "Not defined"}
                     </p>
                     <p>
-                      <b>Discription : </b>
+                      <b>Description : </b>
                       {token?.rawMetadata?.description
                         ? token?.rawMetadata?.description
                         : "Not defined"}
