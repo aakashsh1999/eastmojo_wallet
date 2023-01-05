@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ALCHEMYKEY } from "../../../utils";
+// import { ALCHEMYKEY } from "../../../utils";
 // import { formatFromWei } from "../../../web3";
 import Nfts from "./Nfts";
 import { useSelector } from "react-redux";
@@ -9,7 +9,7 @@ const NftsTab = () => {
   const { account, currentNetwork } = useSelector((state) => state.wallet);
   const [nfts, setNfts] = useState([]);
   const settings = {
-    apiKey: ALCHEMYKEY, // Replace with your Alchemy API Key.
+    apiKey: process.env.REACT_APP_ALCHEMYKEY, // Replace with your Alchemy API Key.
     network:
       currentNetwork.chain === 137
         ? Network.MATIC_MAINNET

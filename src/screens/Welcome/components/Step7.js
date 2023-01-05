@@ -1,10 +1,9 @@
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { AiFillCaretLeft } from "react-icons/ai";
-import { BiLockAlt } from "react-icons/bi";
+// import { AiFillCaretLeft } from "react-icons/ai";
+// import { BiLockAlt } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
-
 const Step7 = ({ nextStep, prevStep, wallet }) => {
   const [mnemonic, setMnemonic] = useState([]);
   const [inputMnemonic, setInputMnemonic] = useState([]);
@@ -28,13 +27,12 @@ const Step7 = ({ nextStep, prevStep, wallet }) => {
     setMnemonic((prev) => [...prev, val]);
   };
   const shuffleArray = (array) => {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      const temp = array[i];
-      array[i] = array[j];
-      array[j] = temp;
+    const arrayCopy = [...array];
+    for (let i = arrayCopy.length - 1; i > 0; i--) {
+      const j = Math.floor(crypto.getRandomValues(new Uint32Array(1))[0] / (2 ** 32 - 1) * (i + 1));
+      [arrayCopy[i], arrayCopy[j]] = [arrayCopy[j], arrayCopy[i]];
     }
-    return array;
+    return arrayCopy;
   };
   const submitHandler = () => {
     let inputString = inputMnemonic.join(" ");
@@ -99,11 +97,10 @@ const Step7 = ({ nextStep, prevStep, wallet }) => {
       </div>
       <button
         onClick={submitHandler}
-        className={` ${
-          inputMnemonic.length < mnemonicLength
-            ? " bg-gray-500 pointer-events-none"
-            : "bg-primary"
-        } py-3 px-10 mt-10  rounded-xl w-full`}
+        className={` ${inputMnemonic.length < mnemonicLength
+          ? " bg-gray-500 pointer-events-none"
+          : "bg-primary"
+          } py-3 px-10 mt-10  rounded-xl w-full`}
       >
         {"Next"}
       </button>

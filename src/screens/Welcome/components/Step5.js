@@ -4,7 +4,7 @@ import { AiFillCaretLeft } from "react-icons/ai";
 import Spinner from "react-svg-spinner";
 import { useNavigate } from "react-router-dom";
 import { AES } from "crypto-js";
-import { CRYPTOJSSECRET } from "../../../utils";
+// import { CRYPTOJSSECRET } from "../../../utils";
 import { useIndexedDB } from "react-indexed-db";
 import { STORENAME } from "../../../utils/dbConfig";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -49,7 +49,7 @@ const Step5 = ({ nextStep, prevStep, wallet }) => {
           privateKey: wallet.privateKey,
           memnoic,
         }),
-        CRYPTOJSSECRET
+        process.env.REACT_APP_CRYPTOJSSECRET
       ).toString();
 
       add({

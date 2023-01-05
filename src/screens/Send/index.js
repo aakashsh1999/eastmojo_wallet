@@ -7,11 +7,12 @@ import { MdSend } from "react-icons/md";
 import { useEffect } from "react";
 import { sendCurrency } from "../../web3";
 
-import { APIKEYCOVLANT, BASECOVALENT } from "../../utils";
+import { BASECOVALENT } from "../../utils";
 
 import axios from "axios";
 import TransactionBlock from "./components/TransactionBlock";
 import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
 const Send = () => {
   const { account, currentNetwork } = useSelector((state) => state.wallet);
 
@@ -25,9 +26,8 @@ const Send = () => {
       const {
         data: { data },
       } = await axios.get(
-        `${BASECOVALENT}/${currentNetwork.chain}/address/${account?.address}/transactions_v2/?key=${APIKEYCOVLANT}`
+        `${BASECOVALENT}/${currentNetwork.chain}/address/${account?.address}/transactions_v2/?key=${process.env.REACT_APP_APIKEYCOVLANT}`
       );
-      // console.log(data);
       setTransactions(data.items);
     };
     if (account?.address && currentNetwork?.chain) {
@@ -36,16 +36,22 @@ const Send = () => {
   }, [account, currentNetwork]);
 
   const sendMatic = async () => {
-    try {
-      setLoading(true);
-      const { tx } = await sendCurrency(toAddress, amount, account);
-      console.log(tx);
-      setLoading(false);
-      setToAddress("");
-      setAmount("");
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
+    if (toAddress === account?.address) {
+      toast.error("Same wallet detected !")
+      setToAddress('')
+    }
+    else {
+      try {
+        setLoading(true);
+        const { tx } = await sendCurrency(toAddress, amount, account);
+        console.log(tx);
+        setLoading(false);
+        setToAddress("");
+        setAmount("");
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+      }
     }
   };
 
@@ -80,9 +86,8 @@ const Send = () => {
           </div>
           <button
             onClick={sendMatic}
-            className={` ${
-              loading ? "bg-gray-500 pointer-events-none" : "bg-primary"
-            } py-3 px-10 mt-4  rounded-xl flex justify-center  items-center max-w-max`}
+            className={` ${loading ? "bg-gray-500 pointer-events-none" : "bg-primary"
+              } py-3 px-10 mt-4  rounded-xl flex justify-center  items-center max-w-max`}
           >
             <p>{loading ? "Please wait..." : " Send"}</p>
             {!loading && (

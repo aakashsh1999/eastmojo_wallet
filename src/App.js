@@ -20,7 +20,7 @@ import { useDispatch } from "react-redux";
 import { walletActions } from "./store/wallet/wallet-slice";
 import { useIndexedDB } from "react-indexed-db";
 import { STORENAME } from "./utils/dbConfig";
-import { CRYPTOJSSECRET } from "./utils";
+// import { CRYPTOJSSECRET } from "./utils";
 import { AES } from "crypto-js";
 import CryptoJS from "crypto-js";
 initDB(DBConfig);
@@ -60,7 +60,7 @@ const App = () => {
           return;
         }
 
-        const bytes = AES.decrypt(wallet.wallet, CRYPTOJSSECRET);
+        const bytes = AES.decrypt(wallet.wallet, process.env.REACT_APP_CRYPTOJSSECRET);
         const originalWallet = bytes.toString(CryptoJS.enc.Utf8);
         dispatch(walletActions.setAccount(JSON.parse(originalWallet)));
       } catch (error) {

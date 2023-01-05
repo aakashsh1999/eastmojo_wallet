@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { APIKEYCOVLANT, BASECOVALENT } from "../../../utils";
+import { BASECOVALENT } from "../../../utils";
 import { formatFromWei } from "../../../web3";
 import { useSelector } from "react-redux";
 const AssetTab = () => {
@@ -12,7 +12,7 @@ const AssetTab = () => {
       const {
         data: { data },
       } = await axios.get(
-        `${BASECOVALENT}/${currentNetwork.chain}/address/${account?.address}/balances_v2/?key=${APIKEYCOVLANT}`
+        `${BASECOVALENT}/${currentNetwork.chain}/address/${account?.address}/balances_v2/?key=${process.env.REACT_APP_APIKEYCOVLANT}`
       );
       // console.log(data);
       setBalances(data.items);
