@@ -2,7 +2,6 @@ import Web3 from "web3";
 import { PROVIDER } from "../utils";
 // import { stakeAbi, stakeAddress } from "./contracts/staking";
 // import { tokenAbi, tokenAddress } from "./contracts/token";
-// import toast from "react-hot-toast";
 import { NFT_TRANSFER_ABI } from "./contracts/NFT_TRANSFER";
 import { ethers, providers } from "ethers";
 import toast from "react-hot-toast";
