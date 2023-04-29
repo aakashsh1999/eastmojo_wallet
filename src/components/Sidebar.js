@@ -70,6 +70,11 @@ const Sidebar = ({ active, setActive, menuRef }) => {
       icon: <AiOutlineLogout />,
       handler: () => logOut(),
     },
+    {
+      text: "Browser",
+      icon: <AiOutlineLogout />,
+      handler: () => navigate("/browser"),
+    },
   ];
 
   return (

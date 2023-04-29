@@ -94,7 +94,7 @@ export default function NftDetailsModal({ open, setOpen, token }) {
                 <>
                   <button
                     className="absolute bg-dark-600 h-6 w-6 rounded-full bottom-3 right-3 flex justify-center items-center text-white text-2xl"
-                    onClick={async () => download(token?.media[0]?.gateway)}
+                    onClick={async () => download(token?.media[0]?.raw)}
                   >
                     <MdDownload />
                   </button>

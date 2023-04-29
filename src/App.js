@@ -16,18 +16,24 @@ import Setting from "./screens/Settings";
 import Term from "./screens/Terms";
 import About from "./screens/About";
 import Privacy from "./screens/Privacy";
-import { useDispatch } from "react-redux";
+import Browser from "./screens/Browser";
+import { connect, useDispatch } from "react-redux";
 import { walletActions } from "./store/wallet/wallet-slice";
 import { useIndexedDB } from "react-indexed-db";
 import { STORENAME } from "./utils/dbConfig";
 // import { CRYPTOJSSECRET } from "./utils";
 import { AES } from "crypto-js";
 import CryptoJS from "crypto-js";
+import WSConnector from "./components/wsConnector";
+import Loading from "./components/loading";
+import LoginRequest from "./screens/LoginRequest";
+
 initDB(DBConfig);
 const App = () => {
   const dispatch = useDispatch();
   const { getByID } = useIndexedDB(STORENAME);
   const navigate = useNavigate();
+  const connector = WSConnector();
 
   useEffect(() => {
     try {
@@ -60,7 +66,10 @@ const App = () => {
           return;
         }
 
-        const bytes = AES.decrypt(wallet.wallet, process.env.REACT_APP_CRYPTOJSSECRET);
+        const bytes = AES.decrypt(
+          wallet.wallet,
+          process.env.REACT_APP_CRYPTOJSSECRET
+        );
         const originalWallet = bytes.toString(CryptoJS.enc.Utf8);
         dispatch(walletActions.setAccount(JSON.parse(originalWallet)));
       } catch (error) {
@@ -71,6 +80,8 @@ const App = () => {
     getAccount();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
+
+  if (connector.loginRequested) return <LoginRequest connector={connector} />;
 
   return (
     <div className=" bg-dark min-h-screen text-white">
@@ -85,7 +96,9 @@ const App = () => {
         <Route path="/term" element={<Term />} />
         <Route path="/about" element={<About />} />
         <Route path="/privacypolicy" element={<Privacy />} />
+        <Route path="/browser" element={<Browser />} />
       </Routes>
+      <Loading open={!connector.isConnected} />
     </div>
   );
 };
