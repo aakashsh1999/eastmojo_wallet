@@ -16,26 +16,32 @@ function WSConnector() {
   const getFingerPrint = async () => {
     const response = await fetch("https://api.ipify.org?format=json");
     let { ip } = await response.json();
-    let deviceProp = navigator.userAgent.toString();
-    let fingerPrint = ip + "_" + deviceProp;
-    let sha = sha256(fingerPrint);
+
+    let sha = sha256(ip);
     return sha;
   };
 
   const connect = async () => {
-    // const fingerPrint = await getFingerPrint();
-    const fingerPrint = "navrajDevice";
+    const fingerPrint = await getFingerPrint();
 
     const chatSocket = new WebSocket(
       "ws://api.eastmojoconnect.com/socket/ws/" + fingerPrint + "/"
     );
 
     chatSocket.onmessage = function (e) {
+      console.log("received message...");
       const data = JSON.parse(e.data);
       console.log(data);
       if (data.message === "login_request") {
         setLoginRequested(true);
         setRequestFrom(data.from);
+      }
+      if (data.message === "Wallet_discovery") {
+        chatSocket.send(
+          JSON.stringify({
+            message: "Wallet found",
+          })
+        );
       }
     };
 
@@ -46,6 +52,7 @@ function WSConnector() {
     chatSocket.onopen = function (e) {
       setWalletSocket(chatSocket);
       setIsConnected(true);
+      console.log("Connected to socket");
     };
   };
 
