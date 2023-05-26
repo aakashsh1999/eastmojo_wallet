@@ -27,7 +27,7 @@ function WSConnector() {
     const fingerPrint = "navrajDevice";
 
     const chatSocket = new WebSocket(
-      "ws://" + "localhost:9000" + "/ws/" + fingerPrint + "/"
+      "ws://api.eastmojoconnect.com/socket/ws/" + fingerPrint + "/"
     );
 
     chatSocket.onmessage = function (e) {

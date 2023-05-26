@@ -24,7 +24,7 @@ const LoginRequest = ({ connector }) => {
             variant="filled"
             size="large"
             sx={{ fontSize: 20, background: "green", margin: "10px" }}
-            onClick={connector.acceptLogin}
+            onClick={() => {connector.acceptLogin(); window.location.href="https://api.eastmojoconnect.com"}}
             endIcon={<LockOpenIcon />}
           >
             Connect

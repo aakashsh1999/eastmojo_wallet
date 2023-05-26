@@ -39,7 +39,9 @@ const Step5 = ({ nextStep, prevStep, wallet }) => {
       return;
     }
     try {
+      debugger
       setLoading(true);
+      console.log(process.env.REACT_APP_CRYPTOJSSECRET)
       const encrypted = await wallet.encrypt(password);
       const memnoic = wallet._mnemonic();
 
